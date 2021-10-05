@@ -2,10 +2,15 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.Light;
 
 public class Reactor extends AbstractActor {
     private int temperature;
     private int damage;
+    private boolean isOn;
+    private int lightsCounter;
+    private Light reactorLight;
+    private Animation offAnimation;
     private Animation normalAnimation;
     private Animation hotAnimation;
     private Animation brokenAnimation;
@@ -13,10 +18,13 @@ public class Reactor extends AbstractActor {
     public Reactor(){
         this.temperature = 0;
         this.damage = 0;
+        this.lightsCounter = 0;
+        this.isOn = false;
         this.normalAnimation = new Animation("sprites/reactor_on.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.05f, Animation.PlayMode.LOOP_PINGPONG);
         this.brokenAnimation = new Animation("sprites/reactor_broken.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
-        setAnimation(normalAnimation);
+        this.offAnimation = new Animation("sprites/reactor.png");
+        setAnimation(offAnimation);
     }
 
     public int getTemperature(){
@@ -37,11 +45,10 @@ public class Reactor extends AbstractActor {
         else{
             setAnimation(brokenAnimation);
         }
-
-
     }
 
     public void increaseTemperature(int increment){
+        if(!this.isOn) return;
         if(increment < 0) return;
         if(this.damage > 100) return;
         double newIncrement;
@@ -63,6 +70,7 @@ public class Reactor extends AbstractActor {
     }
 
     public void decreaseTemperature(int decrement){
+        if(!this.isOn) return;
         if(decrement < 0) return;
         if(this.damage == 100){
             return;
@@ -73,5 +81,38 @@ public class Reactor extends AbstractActor {
         updateAnimation();
     }
 
+    public void repairWith(Hammer hammer){
+        if(!this.isOn) return;
+        if(hammer == null) return;
+        if(this.damage < 0 || this.damage == 100) return;
+        this.damage -= 50;
+        if(this.damage < 0) this.damage = 0;
+        hammer.use();
+        updateAnimation();
+    }
+
+    public void turnOn(){
+        this.isOn = true;
+        this.reactorLight.toggle();
+        updateAnimation();
+    }
+
+    public void turnOff(){
+        this.isOn = false;
+        this.reactorLight.toggle();
+        setAnimation(offAnimation);
+    }
+
+    public boolean isRunning(){
+        return this.isOn;
+    }
+
+    public void addLight(Light curLight){
+        if(this.lightsCounter == 1) return;
+        this.lightsCounter++;
+        this.reactorLight = curLight;
+        reactorLight.setElectricityFlow(this.isRunning());
+        this.reactorLight.toggle();
+    }
 }
 
