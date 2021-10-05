@@ -1,16 +1,15 @@
 package sk.tuke.kpi.oop.game;
 
-import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-public class Hammer extends AbstractActor {
+public class Mjolnir extends Hammer{
     private int useNum;
-    private Animation hamAnimation;
+    private Animation mjAnimation;
 
-    public Hammer(){
-        this.useNum = 1;
-        this.hamAnimation = new Animation("sprites/hammer.png");
-        setAnimation(hamAnimation);
+    public Mjolnir(){
+        this.useNum = 4;
+        this.mjAnimation = new Animation("sprites/hammer.png");
+        setAnimation(mjAnimation);
     }
 
     public int getUse(){
@@ -24,5 +23,4 @@ public class Hammer extends AbstractActor {
             this.getScene().removeActor(this);
         }
     }
-
 }

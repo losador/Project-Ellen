@@ -14,6 +14,7 @@ public class Reactor extends AbstractActor {
     private Animation normalAnimation;
     private Animation hotAnimation;
     private Animation brokenAnimation;
+    private Animation extinguishAnimation;
 
     public Reactor(){
         this.temperature = 0;
@@ -24,6 +25,7 @@ public class Reactor extends AbstractActor {
         this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.05f, Animation.PlayMode.LOOP_PINGPONG);
         this.brokenAnimation = new Animation("sprites/reactor_broken.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         this.offAnimation = new Animation("sprites/reactor.png");
+        this.extinguishAnimation = new Animation("sprites/reactor_extinguished.png", 80, 80, 0.5f, Animation.PlayMode.LOOP_PINGPONG);
         setAnimation(offAnimation);
     }
 
@@ -89,8 +91,11 @@ public class Reactor extends AbstractActor {
         if(!this.isOn) return;
         if(hammer == null) return;
         if(this.damage < 0 || this.damage == 100) return;
+        int newDamage;
         this.damage -= 50;
+        newDamage = this.damage;
         if(this.damage < 0) this.damage = 0;
+        this.temperature = (40 * newDamage) + 2000;
         hammer.use();
         updateAnimation();
     }
@@ -116,6 +121,15 @@ public class Reactor extends AbstractActor {
         this.lightsCounter++;
         this.reactorLight = curLight;
         reactorLight.setElectricityFlow(this.isRunning());
+    }
+
+    public void extinguishWith(FireExtinguisher extinguisher){
+        if(extinguisher == null) return;
+        if(this.damage < 100);
+        this.temperature -= 4000;
+        if(this.temperature < 0) this.temperature = 0;
+        extinguisher.use();
+        setAnimation(extinguishAnimation);
     }
 }
 
