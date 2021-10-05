@@ -29,5 +29,6 @@ public class Light extends AbstractActor {
 
     public void setElectricityFlow(boolean el){
         this.isEl = el;
+        if(!el) setAnimation(offAnimation);
     }
 }

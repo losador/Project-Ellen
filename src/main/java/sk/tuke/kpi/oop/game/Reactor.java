@@ -64,7 +64,11 @@ public class Reactor extends AbstractActor {
         if(this.temperature > 2000){
             float newDamage = (float)(this.temperature - 2000)/40;
             this.damage = (int)Math.floor(newDamage);
-            if(this.damage > 100) this.damage = 100;
+            if(this.damage >= 100){
+                this.damage = 100;
+                this.isOn = false;
+                reactorLight.setElectricityFlow(this.isRunning());
+            }
             updateAnimation();
         }
     }
@@ -93,14 +97,14 @@ public class Reactor extends AbstractActor {
 
     public void turnOn(){
         this.isOn = true;
-        this.reactorLight.toggle();
         updateAnimation();
+        reactorLight.setElectricityFlow(this.isRunning());
     }
 
     public void turnOff(){
         this.isOn = false;
-        this.reactorLight.toggle();
         setAnimation(offAnimation);
+        reactorLight.setElectricityFlow(this.isRunning());
     }
 
     public boolean isRunning(){
@@ -112,7 +116,6 @@ public class Reactor extends AbstractActor {
         this.lightsCounter++;
         this.reactorLight = curLight;
         reactorLight.setElectricityFlow(this.isRunning());
-        this.reactorLight.toggle();
     }
 }
 
