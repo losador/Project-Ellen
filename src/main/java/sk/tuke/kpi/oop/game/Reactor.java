@@ -1,8 +1,11 @@
 package sk.tuke.kpi.oop.game;
 
+import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.oop.game.Light;
+
+import java.util.Objects;
 
 public class Reactor extends AbstractActor {
     private int temperature;
@@ -87,9 +90,8 @@ public class Reactor extends AbstractActor {
         updateAnimation();
     }
 
-    public void repairWith(Hammer hammer){
+    public void repairWith(@NotNull Hammer hammer){
         if(!this.isOn) return;
-        if(hammer == null) return;
         if(this.damage < 0 || this.damage == 100) return;
         int newDamage;
         this.damage -= 50;
@@ -121,11 +123,16 @@ public class Reactor extends AbstractActor {
         this.lightsCounter++;
         this.reactorLight = curLight;
         reactorLight.setElectricityFlow(this.isRunning());
+        this.reactorLight.toggle();
     }
 
-    public void extinguishWith(FireExtinguisher extinguisher){
-        if(extinguisher == null) return;
-        if(this.damage < 100);
+    public void removeLight(){
+        Objects.requireNonNull(this.getScene()).removeActor(this.reactorLight);
+        this.reactorLight = null;
+    }
+
+    public void extinguishWith(@NotNull FireExtinguisher extinguisher){
+        if(this.damage < 100) return;
         this.temperature -= 4000;
         if(this.temperature < 0) this.temperature = 0;
         extinguisher.use();
