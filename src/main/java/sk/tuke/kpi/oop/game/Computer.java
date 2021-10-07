@@ -7,10 +7,9 @@ public class Computer extends AbstractActor {
 
     Animation computerAnimation;
 
-    public Computer(Animation computerAnimation){
-        computerAnimation = new Animation("sprites/computer.png", 80, 48, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
+    public Computer(){
+        this.computerAnimation = new Animation("sprites/computer.png", 80, 48, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         setAnimation(computerAnimation);
-        this.computerAnimation = computerAnimation;
     }
 
     public int add(int a, int b){

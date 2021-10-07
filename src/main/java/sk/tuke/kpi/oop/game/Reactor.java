@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-import java.util.Objects;
-
 public class Reactor extends AbstractActor {
     private int temperature;
     private int damage;
@@ -44,6 +42,12 @@ public class Reactor extends AbstractActor {
             setAnimation(normalAnimation);
         }
         else if(this.temperature < 6000){
+            if(this.damage > 80){
+                this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.01f, Animation.PlayMode.LOOP_PINGPONG);
+            }
+            else if(this.damage > 60){
+                this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.03f, Animation.PlayMode.LOOP_PINGPONG);
+            }
             setAnimation(hotAnimation);
         }
         else{
@@ -71,10 +75,10 @@ public class Reactor extends AbstractActor {
             if(this.damage >= 100){
                 this.damage = 100;
                 this.isOn = false;
-                reactorLight.setElectricityFlow(this.isRunning());
+                if(this.reactorLight != null) reactorLight.setElectricityFlow(this.isRunning());
             }
-            updateAnimation();
         }
+        updateAnimation();
     }
 
     public void decreaseTemperature(int decrement){
@@ -90,7 +94,6 @@ public class Reactor extends AbstractActor {
     }
 
     public void repairWith(@NotNull Hammer hammer){
-        if(!this.isOn) return;
         if(this.damage < 0 || this.damage == 100) return;
         int newDamage;
         this.damage -= 50;
@@ -104,13 +107,13 @@ public class Reactor extends AbstractActor {
     public void turnOn(){
         this.isOn = true;
         updateAnimation();
-        reactorLight.setElectricityFlow(this.isRunning());
+        if(this.reactorLight != null) reactorLight.setElectricityFlow(this.isOn);
     }
 
     public void turnOff(){
         this.isOn = false;
         setAnimation(offAnimation);
-        reactorLight.setElectricityFlow(this.isRunning());
+        if(this.reactorLight != null) reactorLight.setElectricityFlow(this.isOn);
     }
 
     public boolean isRunning(){
@@ -126,8 +129,9 @@ public class Reactor extends AbstractActor {
     }
 
     public void removeLight(){
-        Objects.requireNonNull(this.getScene()).removeActor(this.reactorLight);
+        reactorLight.setElectricityFlow(false);
         this.reactorLight = null;
+        this.lightsCounter--;
     }
 
     public void extinguishWith(@NotNull FireExtinguisher extinguisher){

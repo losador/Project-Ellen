@@ -2,6 +2,8 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
+import java.util.Objects;
+
 public class Mjolnir extends Hammer{
     private int useNum;
     private Animation mjAnimation;
@@ -20,7 +22,7 @@ public class Mjolnir extends Hammer{
         if(this.useNum <= 0) return;
         this.useNum -= 1;
         if(this.useNum == 0){
-            this.getScene().removeActor(this);
+            Objects.requireNonNull(this.getScene()).removeActor(this);
         }
     }
 }

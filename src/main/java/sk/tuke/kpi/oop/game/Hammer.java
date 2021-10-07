@@ -3,6 +3,8 @@ package sk.tuke.kpi.oop.game;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
+import java.util.Objects;
+
 public class Hammer extends AbstractActor {
     private int useNum;
     private Animation hamAnimation;
@@ -21,7 +23,7 @@ public class Hammer extends AbstractActor {
         if(this.useNum <= 0) return;
         this.useNum -= 1;
         if(this.useNum == 0){
-            this.getScene().removeActor(this);
+            Objects.requireNonNull(this.getScene()).removeActor(this);
         }
     }
 
