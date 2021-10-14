@@ -35,7 +35,7 @@ public class Cooler extends AbstractActor {
     }
 
     private void coolReactor(){
-        if(this.state) return;
+        if(!this.state) return;
         if(this.currReactor.getTemperature() > 0) this.currReactor.decreaseTemperature(1);
     }
 
