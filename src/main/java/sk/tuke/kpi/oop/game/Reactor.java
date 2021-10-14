@@ -1,8 +1,12 @@
 package sk.tuke.kpi.oop.game;
 
 import org.jetbrains.annotations.NotNull;
+import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.action.PerpetualReactorHeating;
+import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
+import sk.tuke.kpi.oop.game.tools.Hammer;
 
 public class Reactor extends AbstractActor {
     private int temperature;
@@ -22,7 +26,7 @@ public class Reactor extends AbstractActor {
         this.lightsCounter = 0;
         this.isOn = false;
         this.normalAnimation = new Animation("sprites/reactor_on.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
-        this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.05f, Animation.PlayMode.LOOP_PINGPONG);
+        this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         this.brokenAnimation = new Animation("sprites/reactor_broken.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         this.offAnimation = new Animation("sprites/reactor.png");
         this.extinguishAnimation = new Animation("sprites/reactor_extinguished.png", 80, 80, 0.5f, Animation.PlayMode.LOOP_PINGPONG);
@@ -43,10 +47,10 @@ public class Reactor extends AbstractActor {
         }
         else if(this.temperature < 6000){
             if(this.damage > 80){
-                this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.01f, Animation.PlayMode.LOOP_PINGPONG);
+                this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.03f, Animation.PlayMode.LOOP_PINGPONG);
             }
             else if(this.damage > 60){
-                this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.03f, Animation.PlayMode.LOOP_PINGPONG);
+                this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.05f, Animation.PlayMode.LOOP_PINGPONG);
             }
             setAnimation(hotAnimation);
         }
@@ -88,12 +92,15 @@ public class Reactor extends AbstractActor {
             return;
         }
         else if(this.damage >= 50 && this.damage < 100) {
-            this.temperature = this.temperature - (decrement / 2);
+            double newDecrement = decrement / 2;
+            decrement = (int) Math.round(newDecrement);
         }
+        this.temperature -= decrement;
         updateAnimation();
     }
 
-    public void repairWith(@NotNull Hammer hammer){
+    public void repairWith(Hammer hammer){
+        if(hammer == null) return;
         if(this.damage < 0 || this.damage == 100) return;
         int newDamage;
         this.damage -= 50;
@@ -134,12 +141,19 @@ public class Reactor extends AbstractActor {
         this.lightsCounter--;
     }
 
-    public void extinguishWith(@NotNull FireExtinguisher extinguisher){
+    public void extinguishWith(FireExtinguisher extinguisher){
         if(this.damage < 100) return;
         this.temperature -= 4000;
         if(this.temperature < 0) this.temperature = 0;
         extinguisher.use();
         setAnimation(extinguishAnimation);
+    }
+
+    @Override
+    public void addedToScene(Scene scene) {
+        super.addedToScene(scene);
+        scene.scheduleAction(new PerpetualReactorHeating(1), this);
+        new PerpetualReactorHeating(1).scheduleFor(this);
     }
 }
 
