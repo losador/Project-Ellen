@@ -1,23 +1,56 @@
 package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.Actor;
+import sk.tuke.kpi.gamelib.Disposable;
 import sk.tuke.kpi.gamelib.Scene;
+import sk.tuke.kpi.gamelib.actions.ActionSequence;
 import sk.tuke.kpi.gamelib.actions.Invoke;
+import sk.tuke.kpi.gamelib.actions.Wait;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 
-public class DefectiveLight extends Light{
+public class DefectiveLight extends Light implements Repairable{
 
-    public void defLight(){
+    private Disposable disposeLight;
+    private boolean repaired;
+
+    public DefectiveLight(){
+        super();
+        this.repaired = false;
+    }
+
+    public void startBlink(){
+        this.repaired = false;
         int min = 0, max = 20;
         int r = max - min;
         int random = (int) ((Math.random() * r) - min);
-        if(random == 1) toggle();
+        if(random == 1) turnOn();
+        if(random == 4) turnOff();
     }
 
     @Override
     public void addedToScene(Scene scene){
         super.addedToScene(scene);
-        new Invoke<>(this::defLight).scheduleFor(this);
-        new Loop<>(new Invoke<>(this::defLight)).scheduleFor(this);
+        this.disposeLight = new Loop<>(new Invoke<>(this::startBlink)).scheduleFor(this);
+    }
+
+    public void breakLight(){
+        this.disposeLight = new Loop<>(new Invoke<>(this::startBlink)).scheduleFor(this);
+    }
+
+    @Override
+    public boolean repair(){
+        if(repaired) return false;
+        this.repaired = true;
+        this.disposeLight.dispose();
+        turnOn();
+        new ActionSequence<>(
+            new Wait<>(10),
+            new Invoke<>(this::turnOn)
+        ).scheduleFor(this);
+        new ActionSequence<>(
+            new Wait<>(10),
+            new Invoke<>(this::breakLight)
+        ).scheduleFor(this);
+        return true;
     }
 }

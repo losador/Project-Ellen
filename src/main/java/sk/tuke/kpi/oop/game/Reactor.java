@@ -1,6 +1,5 @@
 package sk.tuke.kpi.oop.game;
 
-import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
@@ -8,7 +7,10 @@ import sk.tuke.kpi.oop.game.action.PerpetualReactorHeating;
 import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
 import sk.tuke.kpi.oop.game.tools.Hammer;
 
-public class Reactor extends AbstractActor {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Reactor extends AbstractActor implements Switchable, Repairable{
     private int temperature;
     private int damage;
     private boolean isOn;
@@ -19,6 +21,7 @@ public class Reactor extends AbstractActor {
     private Animation hotAnimation;
     private Animation brokenAnimation;
     private Animation extinguishAnimation;
+    private Set<EnergyConsumer> devices;
 
     public Reactor(){
         this.temperature = 0;
@@ -31,6 +34,7 @@ public class Reactor extends AbstractActor {
         this.offAnimation = new Animation("sprites/reactor.png");
         this.extinguishAnimation = new Animation("sprites/reactor_extinguished.png", 80, 80, 0.5f, Animation.PlayMode.LOOP_PINGPONG);
         setAnimation(offAnimation);
+        this.devices = new HashSet<>();
     }
 
     public int getTemperature(){
@@ -79,7 +83,7 @@ public class Reactor extends AbstractActor {
             if(this.damage >= 100){
                 this.damage = 100;
                 this.isOn = false;
-                if(this.reactorLight != null) reactorLight.setElectricityFlow(this.isRunning());
+                if(this.reactorLight != null) reactorLight.setPowered(this.isOn());
             }
         }
         updateAnimation();
@@ -99,54 +103,57 @@ public class Reactor extends AbstractActor {
         updateAnimation();
     }
 
-    public void repairWith(Hammer hammer){
-        if(hammer == null) return;
-        if(this.damage < 0 || this.damage == 100) return;
-        int newDamage;
-        this.damage -= 50;
-        newDamage = this.damage;
-        if(this.damage < 0) this.damage = 0;
-        this.temperature = (40 * newDamage) + 2000;
-        hammer.use();
-        updateAnimation();
+    public boolean repair(){
+        if(this.damage > 0 && this.damage < 100) {
+            int newDamage;
+            this.damage -= 50;
+            newDamage = this.damage;
+            if (this.damage < 0) this.damage = 0;
+            this.temperature = (40 * newDamage) + 2000;
+            updateAnimation();
+            return true;
+        }
+        return false;
+    }
+
+    private void updateStateOfDevice(EnergyConsumer device){
+        device.setPowered(isOn());
     }
 
     public void turnOn(){
         this.isOn = true;
         updateAnimation();
-        if(this.reactorLight != null) reactorLight.setElectricityFlow(this.isOn);
+        if(this.devices != null) this.devices.forEach(this::updateStateOfDevice);
     }
 
     public void turnOff(){
         this.isOn = false;
         setAnimation(offAnimation);
-        if(this.reactorLight != null) reactorLight.setElectricityFlow(this.isOn);
+        if(this.devices != null) this.devices.forEach(this::updateStateOfDevice);
     }
 
-    public boolean isRunning(){
+    public boolean isOn(){
         return this.isOn;
     }
 
-    public void addLight(Light curLight){
-        if(this.lightsCounter == 1) return;
-        this.lightsCounter++;
-        this.reactorLight = curLight;
-        reactorLight.setElectricityFlow(this.isRunning());
-        this.reactorLight.toggle();
+    public void addDevice(EnergyConsumer device){
+        this.devices.add(device);
+        device.setPowered(this.isOn);
     }
 
-    public void removeLight(){
-        reactorLight.setElectricityFlow(false);
-        this.reactorLight = null;
-        this.lightsCounter--;
+    public void removeDevice(EnergyConsumer device){
+        device.setPowered(false);
+        this.devices.remove(device);
     }
 
-    public void extinguishWith(FireExtinguisher extinguisher){
-        if(this.damage < 100) return;
-        this.temperature -= 4000;
-        if(this.temperature < 0) this.temperature = 0;
-        extinguisher.use();
-        setAnimation(extinguishAnimation);
+    public boolean extinguish() {
+        if (this.damage >= 100){
+            this.temperature -= 4000;
+            if (this.temperature < 0) this.temperature = 0;
+            setAnimation(extinguishAnimation);
+            return true;
+        }
+        return false;
     }
 
     @Override

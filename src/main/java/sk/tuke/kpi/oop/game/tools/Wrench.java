@@ -5,21 +5,17 @@ import sk.tuke.kpi.gamelib.graphics.Animation;
 
 import java.util.Objects;
 
-public class Hammer extends BreakableTool{
-    private Animation hamAnimation;
+public class Wrench extends BreakableTool{
 
-    public Hammer(){
-        super(1);
-        this.hamAnimation = new Animation("sprites/hammer.png");
-        setAnimation(hamAnimation);
-    }
+    private Animation wrenchAnimation;
 
-    public int getUse(){
-        return this.remainingUses;
+    public Wrench() {
+        super(2);
+        setAnimation(this.wrenchAnimation = new Animation("sprites/wrench.png"));
     }
 
     @Override
-    public void useWith(Actor actor) {
+    public void useWith(Actor actor){
         this.remainingUses -= 1;
         if(this.remainingUses == 0){
             Objects.requireNonNull(this.getScene()).removeActor(this);
