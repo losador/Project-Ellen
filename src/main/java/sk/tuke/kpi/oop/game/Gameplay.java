@@ -56,10 +56,10 @@ public class Gameplay extends Scenario{
         ).scheduleFor(cooler);
     }
 
-    public void addComputer(Scene scene, Computer computer, Map<String,MapMarker> markers){
+    public void addComputer(Reactor reactor, Scene scene, Computer computer, Map<String,MapMarker> markers){
         MapMarker computerArea = markers.get("computer-area");
         scene.addActor(computer, computerArea.getPosX(), computerArea.getPosY());
-        computer.setPowered(true);
+        reactor.addDevice(computer);
     }
 
     public void repairReactor(Reactor reactor, Hammer hammer){
@@ -110,7 +110,7 @@ public class Gameplay extends Scenario{
         addCooler2(scene, cooler2, markers);
         addCooler3(scene, cooler3, markers);
         Computer computer = new Computer();
-        addComputer(scene, computer, markers);
+        addComputer(reactor2, scene, computer, markers);
         Hammer hammer = new Hammer();
         scene.addActor(hammer);
         repairReactor(reactor, hammer);
