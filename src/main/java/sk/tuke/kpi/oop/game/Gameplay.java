@@ -8,23 +8,58 @@ import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.actions.Wait;
 import sk.tuke.kpi.gamelib.actions.When;
 import sk.tuke.kpi.gamelib.framework.Scenario;
+import sk.tuke.kpi.gamelib.map.MapMarker;
 import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
 import sk.tuke.kpi.oop.game.tools.Hammer;
 import sk.tuke.kpi.oop.game.tools.Wrench;
 
+import java.text.spi.CollatorProvider;
+import java.util.Map;
+
 public class Gameplay extends Scenario{
 
-    public void addReactor(Reactor reactor, Scene scene){
-        scene.addActor(reactor, 64, 64);
+    public void addReactor(Reactor reactor, Scene scene, Map<String,MapMarker> markers){// obtaining reference to marker named "reactor-area-1"
+        MapMarker reactorArea1 = markers.get("reactor-area-1");
+        scene.addActor(reactor, reactorArea1.getPosX(), reactorArea1.getPosY());
         reactor.turnOn();
     }
 
-    public void addCooler(Scene scene, Cooler cooler){
-        scene.addActor(cooler, 200, 64);
+    public void addReactor2(Reactor reactor, Scene scene, Map<String,MapMarker> markers){// obtaining reference to marker named "reactor-area-1"
+        MapMarker reactorArea2 = markers.get("reactor-area-2");
+        scene.addActor(reactor, reactorArea2.getPosX(), reactorArea2.getPosY());
+        reactor.turnOn();
+    }
+
+
+    public void addCooler(Scene scene, Cooler cooler, Map<String,MapMarker> markers){
+        MapMarker coolerArea1 = markers.get("cooler-area-1");
+        scene.addActor(cooler, coolerArea1.getPosX(), coolerArea1.getPosY());
         new ActionSequence<>(
             new Wait<>(5),
             new Invoke<>(cooler::turnOn)
         ).scheduleFor(cooler);
+    }
+    public void addCooler2(Scene scene, Cooler cooler, Map<String,MapMarker> markers){
+        MapMarker coolerArea2 = markers.get("cooler-area-2");
+        scene.addActor(cooler, coolerArea2.getPosX(), coolerArea2.getPosY());
+        new ActionSequence<>(
+            new Wait<>(5),
+            new Invoke<>(cooler::turnOn)
+        ).scheduleFor(cooler);
+    }
+    public void addCooler3(Scene scene, Cooler cooler, Map<String,MapMarker> markers){
+        MapMarker coolerArea3 = markers.get("cooler-area-3");
+        scene.addActor(cooler, coolerArea3.getPosX(), coolerArea3.getPosY());
+        new ActionSequence<>(
+            new Wait<>(5),
+            new Invoke<>(cooler::turnOn)
+        ).scheduleFor(cooler);
+    }
+
+    public void addComputer(Scene scene, Computer computer, Map<String,MapMarker> markers){
+        MapMarker computerArea = markers.get("computer-area");
+        scene.addActor(computer, computerArea.getPosX(), computerArea.getPosY());
+        computer.setPowered(true);
     }
 
     public void repairReactor(Reactor reactor, Hammer hammer){
@@ -63,20 +98,27 @@ public class Gameplay extends Scenario{
 
     @Override
     public void setupPlay(@NotNull Scene scene) {
+        Map<String, MapMarker> markers = scene.getMap().getMarkers();
         Reactor reactor = new Reactor();
-        addReactor(reactor, scene);
+        addReactor(reactor, scene, markers);
+        Reactor reactor2 = new Reactor();
+        addReactor2(reactor2, scene, markers);
         Cooler cooler = new Cooler(reactor);
-        //Cooler cooler2 = new Cooler(reactor);
-        addCooler(scene, cooler);
-        //addCooler(scene, cooler2);
+        Cooler cooler2 = new Cooler(reactor2);
+        Cooler cooler3 = new Cooler(reactor2);
+        addCooler(scene, cooler, markers);
+        addCooler2(scene, cooler2, markers);
+        addCooler3(scene, cooler3, markers);
+        Computer computer = new Computer();
+        addComputer(scene, computer, markers);
         Hammer hammer = new Hammer();
         scene.addActor(hammer);
         repairReactor(reactor, hammer);
         FireExtinguisher ext = new FireExtinguisher();
-        scene.addActor(ext, 170, 98);
+        scene.addActor(ext);
         extinguishReactor(reactor, ext);
         Wrench wrench = new Wrench();
-        scene.addActor(wrench, 400, 100);
+        scene.addActor(wrench);
         DefectiveLight dfLight = new DefectiveLight();
         addDefLight(reactor, dfLight, scene);
         repairLight(dfLight, wrench);
