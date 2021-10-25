@@ -93,7 +93,7 @@ public class Gameplay extends Scenario{
         new ActionSequence<>(
             new Wait<>(10),
             new Invoke<>(wrench::useWith)
-        ).scheduleFor(wrench);
+        ).scheduleFor(dfLight);
     }
 
     @Override

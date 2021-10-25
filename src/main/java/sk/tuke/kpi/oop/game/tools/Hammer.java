@@ -2,10 +2,11 @@ package sk.tuke.kpi.oop.game.tools;
 
 import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.Repairable;
 
 import java.util.Objects;
 
-public class Hammer extends BreakableTool{
+public class Hammer extends BreakableTool<Repairable> {
     private Animation hamAnimation;
 
     public Hammer(){
@@ -19,10 +20,9 @@ public class Hammer extends BreakableTool{
     }
 
     @Override
-    public void useWith(Actor actor) {
-        this.remainingUses -= 1;
-        if(this.remainingUses == 0){
-            Objects.requireNonNull(this.getScene()).removeActor(this);
-        }
+    public void useWith(Repairable repairable) {
+        if (repairable == null) return;
+        repairable.repair();
+        super.useWith(repairable);
     }
 }
