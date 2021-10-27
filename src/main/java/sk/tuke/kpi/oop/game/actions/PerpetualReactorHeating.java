@@ -1,4 +1,4 @@
-package sk.tuke.kpi.oop.game.action;
+package sk.tuke.kpi.oop.game.actions;
 
 import sk.tuke.kpi.gamelib.framework.actions.AbstractAction;
 import sk.tuke.kpi.oop.game.Reactor;

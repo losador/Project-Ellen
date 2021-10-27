@@ -8,11 +8,9 @@ import sk.tuke.kpi.gamelib.graphics.Animation;
 
 public class Helicopter extends AbstractActor {
 
-    private Animation heliAnim;
-
     public Helicopter(){
-        this.heliAnim = new Animation("sprites/heli.png",64,64,0.1f, Animation.PlayMode.LOOP_PINGPONG);
-        setAnimation(this.heliAnim);
+        Animation heliAnim = new Animation("sprites/heli.png", 64, 64, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
+        setAnimation(heliAnim);
     }
 
     private void chasing(){

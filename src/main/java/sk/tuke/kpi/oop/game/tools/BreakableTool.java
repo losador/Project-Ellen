@@ -13,6 +13,10 @@ public abstract class BreakableTool<A extends Actor> extends AbstractActor imple
         this.remainingUses = uses;
     }
 
+    public int getRemainingUses(){
+        return this.remainingUses;
+    }
+
     public void useWith(A actor){
         this.remainingUses -= 1;
         if(this.remainingUses == 0){

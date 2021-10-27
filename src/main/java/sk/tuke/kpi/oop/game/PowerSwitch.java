@@ -6,10 +6,9 @@ import sk.tuke.kpi.gamelib.graphics.Color;
 
 public class PowerSwitch extends AbstractActor {
     private Switchable switchable;
-    private Animation conImage;
 
     public PowerSwitch(Switchable switchable){
-        this.conImage = new Animation("sprites/switch.png");
+        Animation conImage = new Animation("sprites/switch.png");
         setAnimation(conImage);
         this.switchable = switchable;
     }
