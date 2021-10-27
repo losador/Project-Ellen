@@ -8,22 +8,25 @@ import sk.tuke.kpi.gamelib.framework.Player;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-import java.util.Objects;
-
 public class Teleport extends AbstractActor {
-    private Animation teleportAnimation;
     private Teleport destTeleport;
     private boolean isActive;
 
     public Teleport(Teleport teleport){
         this.destTeleport = teleport;
-        setAnimation(this.teleportAnimation = new Animation("sprites/lift.png"));
+        Animation teleportAnimation;
+        setAnimation(teleportAnimation = new Animation("sprites/lift.png"));
         this.isActive = false;
     }
 
     public void setDestination(Teleport destinationTeleport){
+        if(destinationTeleport == this) return;
         this.destTeleport = destinationTeleport;
         this.destTeleport.isActive = false;
+    }
+
+    public Teleport getDestination(){
+        return this.destTeleport;
     }
 
     public boolean ifIntersects(Teleport tp, Actor actor){
