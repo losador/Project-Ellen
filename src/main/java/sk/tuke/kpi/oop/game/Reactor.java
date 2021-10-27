@@ -1,5 +1,6 @@
 package sk.tuke.kpi.oop.game;
 
+import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
@@ -12,7 +13,6 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     private int temperature;
     private int damage;
     private boolean isOn;
-    private int lightsCounter;
     private Animation offAnimation;
     private Animation normalAnimation;
     private Animation hotAnimation;
@@ -23,7 +23,6 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     public Reactor(){
         this.temperature = 0;
         this.damage = 0;
-        this.lightsCounter = 0;
         this.isOn = false;
         this.normalAnimation = new Animation("sprites/reactor_on.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         this.hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
@@ -64,16 +63,14 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
         if(!this.isOn) return;
         if(increment < 0) return;
         if(this.damage > 100) return;
-        double newIncrement;
+        int newIncrement = 0;
         if(this.damage >= 33 && this.damage <= 66){
-            newIncrement = (double)increment * 1.5;
-            newIncrement = Math.round(newIncrement);
-            increment = (int)newIncrement;
+            newIncrement = (int) Math.round(increment * 1.5);
         }
         if(this.damage > 66){
-            increment *= 2;
+            newIncrement = increment * 2;
         }
-        this.temperature = this.temperature + increment;
+        this.temperature = this.temperature + newIncrement;
         if(this.temperature > 2000){
             float newDamage = (float)(this.temperature - 2000)/40;
             this.damage = (int)Math.floor(newDamage);
@@ -88,15 +85,15 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
 
     public void decreaseTemperature(int decrement){
         if(!this.isOn) return;
+        int newDecrement = 0;
         if(decrement < 0) return;
         if(this.damage == 100){
             return;
         }
         else if(this.damage >= 50 && this.damage < 100) {
-            double newDecrement = decrement / 2;
-            decrement = (int) Math.round(newDecrement);
+            newDecrement = decrement / 2;
         }
-        this.temperature -= decrement;
+        this.temperature -= newDecrement;
         updateAnimation();
     }
 
@@ -155,7 +152,7 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     }
 
     @Override
-    public void addedToScene(Scene scene) {
+    public void addedToScene(@NotNull Scene scene) {
         super.addedToScene(scene);
         scene.scheduleAction(new PerpetualReactorHeating(1), this);
         new PerpetualReactorHeating(1).scheduleFor(this);

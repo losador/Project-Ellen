@@ -1,5 +1,6 @@
 package sk.tuke.kpi.oop.game;
 
+import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.Disposable;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.ActionSequence;
@@ -18,6 +19,7 @@ public class DefectiveLight extends Light implements Repairable{
     }
 
     public void startBlink(){
+        if(!super.isOn()) return;
         this.repaired = false;
         int min = 0, max = 20;
         int r = max - min;
@@ -27,7 +29,7 @@ public class DefectiveLight extends Light implements Repairable{
     }
 
     @Override
-    public void addedToScene(Scene scene){
+    public void addedToScene(@NotNull Scene scene){
         super.addedToScene(scene);
         this.disposeLight = new Loop<>(new Invoke<>(this::startBlink)).scheduleFor(this);
     }

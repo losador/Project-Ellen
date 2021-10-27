@@ -22,8 +22,7 @@ public class TimeBomb extends AbstractActor {
         this.isExploded = false;
         this.activeAnimation = new Animation("sprites/bomb_activated.png", 16, 16, 0.2f, Animation.PlayMode.LOOP_PINGPONG);
         this.explodeAnimation = new Animation("sprites/small_explosion.png", 16, 16, 0.1f, Animation.PlayMode.ONCE);
-        Animation bombAnimation;
-        setAnimation(bombAnimation = new Animation("sprites/bomb.png"));
+        setAnimation(new Animation("sprites/bomb.png"));
     }
 
     public boolean isActivated(){
