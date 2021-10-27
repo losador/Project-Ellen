@@ -1,14 +1,19 @@
-package sk.tuke.kpi.oop.game;
+package sk.tuke.kpi.oop.game.scenarios;
 
 import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
+import sk.tuke.kpi.gamelib.SceneListener;
 import sk.tuke.kpi.gamelib.actions.ActionSequence;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.actions.Wait;
 import sk.tuke.kpi.gamelib.actions.When;
 import sk.tuke.kpi.gamelib.framework.Scenario;
 import sk.tuke.kpi.gamelib.map.MapMarker;
+import sk.tuke.kpi.oop.game.Computer;
+import sk.tuke.kpi.oop.game.Cooler;
+import sk.tuke.kpi.oop.game.DefectiveLight;
+import sk.tuke.kpi.oop.game.Reactor;
 import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
 import sk.tuke.kpi.oop.game.tools.Hammer;
 import sk.tuke.kpi.oop.game.tools.Wrench;
@@ -16,7 +21,7 @@ import sk.tuke.kpi.oop.game.tools.Wrench;
 import java.text.spi.CollatorProvider;
 import java.util.Map;
 
-public class Gameplay extends Scenario{
+public class TrainingGameplay extends Scenario implements SceneListener {
 
     public void addReactor(Reactor reactor, Scene scene, Map<String,MapMarker> markers){// obtaining reference to marker named "reactor-area-1"
         MapMarker reactorArea1 = markers.get("reactor-area-1");
@@ -111,7 +116,7 @@ public class Gameplay extends Scenario{
         addCooler3(scene, cooler3, markers);
         Computer computer = new Computer();
         addComputer(reactor2, scene, computer, markers);
-        Hammer hammer = new Hammer();
+        Hammer hammer = new Hammer(1);
         scene.addActor(hammer);
         repairReactor(reactor, hammer);
         FireExtinguisher ext = new FireExtinguisher();

@@ -7,13 +7,9 @@ public class Mjolnir extends Hammer{
     private Animation mjAnimation;
 
     public Mjolnir(){
-        super.remainingUses = 4;
+        super(4);
         this.mjAnimation = new Animation("sprites/hammer.png");
         setAnimation(mjAnimation);
-    }
-
-    public int getUse(){
-        return this.useNum;
     }
 
 }

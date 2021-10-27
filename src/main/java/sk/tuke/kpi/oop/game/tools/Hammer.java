@@ -9,15 +9,12 @@ import java.util.Objects;
 public class Hammer extends BreakableTool<Repairable> {
     private Animation hamAnimation;
 
-    public Hammer(){
-        super(1);
+    public Hammer(int uses){
+        super(uses);
         this.hamAnimation = new Animation("sprites/hammer.png");
         setAnimation(hamAnimation);
     }
 
-    public int getUse(){
-        return this.remainingUses;
-    }
 
     @Override
     public void useWith(Repairable repairable) {
