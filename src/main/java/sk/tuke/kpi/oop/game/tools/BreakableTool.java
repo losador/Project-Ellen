@@ -2,7 +2,6 @@ package sk.tuke.kpi.oop.game.tools;
 
 import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
-import sk.tuke.kpi.oop.game.Usable;
 
 import java.util.Objects;
 
