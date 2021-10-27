@@ -14,6 +14,7 @@ public class SmartCooler extends Cooler{
     }
 
     public void cool(){
+        if(this.currReactor == null) return;
         if(this.currReactor.getTemperature() > 2500){
             turnOn();
         }
