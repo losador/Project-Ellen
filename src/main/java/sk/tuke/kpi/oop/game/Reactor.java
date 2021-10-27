@@ -13,7 +13,6 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     private int damage;
     private boolean isOn;
     private int lightsCounter;
-    private Light reactorLight;
     private Animation offAnimation;
     private Animation normalAnimation;
     private Animation hotAnimation;
@@ -81,7 +80,7 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
             if(this.damage >= 100){
                 this.damage = 100;
                 this.isOn = false;
-                if(this.reactorLight != null) reactorLight.setPowered(this.isOn());
+                if(this.devices != null) this.devices.forEach(this::updateStateOfDevice);
             }
         }
         updateAnimation();
@@ -119,6 +118,7 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     }
 
     public void turnOn(){
+        if(this.damage >= 100) return;
         this.isOn = true;
         updateAnimation();
         if(this.devices != null) this.devices.forEach(this::updateStateOfDevice);
