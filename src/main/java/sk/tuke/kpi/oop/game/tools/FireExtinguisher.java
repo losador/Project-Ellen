@@ -2,9 +2,8 @@ package sk.tuke.kpi.oop.game.tools;
 
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.oop.game.Reactor;
-import sk.tuke.kpi.oop.game.Repairable;
 
-public class FireExtinguisher extends BreakableTool<Repairable> {
+public class FireExtinguisher extends BreakableTool<Reactor> {
     private Animation exAnimation;
 
     public FireExtinguisher(){
@@ -15,8 +14,7 @@ public class FireExtinguisher extends BreakableTool<Repairable> {
 
     public void useWith(Reactor reactor) {
        if(reactor == null) return;
-       reactor.extinguish();
-       super.useWith(reactor);
+       if(reactor.extinguish()) super.useWith(reactor);
     }
 
 }

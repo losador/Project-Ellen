@@ -1,5 +1,6 @@
 package sk.tuke.kpi.oop.game;
 
+import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
@@ -24,7 +25,7 @@ public class SmartCooler extends Cooler{
     }
 
     @Override
-    public void addedToScene(Scene scene){
+    public void addedToScene(@NotNull Scene scene){
         super.addedToScene(scene);
         new Loop<>(new Invoke<>(this::cool)).scheduleFor(this);
     }

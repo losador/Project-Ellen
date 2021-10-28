@@ -63,12 +63,15 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
         if(!this.isOn) return;
         if(increment < 0) return;
         if(this.damage > 100) return;
-        int newIncrement = 0;
+        int newIncrement;
         if(this.damage >= 33 && this.damage <= 66){
-            newIncrement = (int) Math.round(increment * 1.5);
+            newIncrement = (int)Math.round(increment * 1.5);
         }
-        if(this.damage > 66){
+        else if(this.damage > 66){
             newIncrement = increment * 2;
+        }
+        else {
+            newIncrement = increment;
         }
         this.temperature = this.temperature + newIncrement;
         if(this.temperature > 2000){
@@ -76,7 +79,7 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
             this.damage = (int)Math.floor(newDamage);
             if(this.damage >= 100){
                 this.damage = 100;
-                this.isOn = false;
+                this.turnOff();
                 if(this.devices != null) this.devices.forEach(this::updateStateOfDevice);
             }
         }

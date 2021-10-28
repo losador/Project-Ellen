@@ -7,14 +7,12 @@ public class Wrench extends BreakableTool<DefectiveLight> {
 
     public Wrench() {
         super(2);
-        Animation wrenchAnimation;
-        setAnimation(wrenchAnimation = new Animation("sprites/wrench.png"));
+        setAnimation(new Animation("sprites/wrench.png"));
     }
 
     @Override
     public void useWith(DefectiveLight dfLight){
         if(dfLight == null) return;
-        dfLight.repair();
-        super.useWith(dfLight);
+        if(dfLight.repair()) super.useWith(dfLight);
     }
 }

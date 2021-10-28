@@ -19,13 +19,11 @@ public class DefectiveLight extends Light implements Repairable{
     }
 
     public void startBlink(){
-        if(!super.isOn()) return;
         this.repaired = false;
         int min = 0, max = 20;
         int r = max - min;
         int random = (int) ((Math.random() * r) - min);
-        if(random == 1) turnOn();
-        if(random == 4) turnOff();
+        if(random == 1) toggle();
     }
 
     @Override
