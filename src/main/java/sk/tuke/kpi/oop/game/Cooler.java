@@ -43,7 +43,7 @@ public class Cooler extends AbstractActor implements Switchable{
     @Override
     public void addedToScene(@NotNull Scene scene){
         super.addedToScene(scene);
-        new Loop<>(new Invoke<>(this::coolReactor)).scheduleFor(this);
+        new Loop<>(new Invoke<>(this::coolReactor)).scheduleFor(this.currReactor);
     }
 
 }
