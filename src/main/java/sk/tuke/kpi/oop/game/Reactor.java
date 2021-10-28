@@ -149,7 +149,6 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     @Override
     public void addedToScene(@NotNull Scene scene) {
         super.addedToScene(scene);
-        scene.scheduleAction(new PerpetualReactorHeating(1), this);
         new PerpetualReactorHeating(1).scheduleFor(this);
     }
 }
