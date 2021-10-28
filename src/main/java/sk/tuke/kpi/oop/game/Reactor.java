@@ -89,6 +89,7 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
         }
         if(this.damage >= 50) newDecrement = Math.round(newDecrement / 2);
         this.temperature -= newDecrement;
+        if(this.temperature < 0) this.temperature = 0;
         updateAnimation();
     }
 
