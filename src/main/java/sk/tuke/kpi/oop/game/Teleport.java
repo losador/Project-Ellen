@@ -8,6 +8,8 @@ import sk.tuke.kpi.gamelib.framework.Player;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
+import java.util.Objects;
+
 public class Teleport extends AbstractActor {
     private Teleport destTeleport;
     private boolean isActive;
@@ -53,8 +55,8 @@ public class Teleport extends AbstractActor {
 
     @Override
     public void addedToScene(Scene scene){
-        Player player = (Player) getScene().getFirstActorByName("Player");
         super.addedToScene(scene);
+        Player player = (Player) Objects.requireNonNull(getScene()).getFirstActorByName("Player");
         new Loop<>(new Invoke<>(this::teleportPLayer)).scheduleFor(player);
     }
 }
