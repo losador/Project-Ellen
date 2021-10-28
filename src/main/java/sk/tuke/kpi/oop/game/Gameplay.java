@@ -21,7 +21,7 @@ import sk.tuke.kpi.oop.game.tools.Wrench;
 import java.text.spi.CollatorProvider;
 import java.util.Map;
 
-public class TrainingGameplay extends Scenario implements SceneListener {
+public class Gameplay extends Scenario implements SceneListener {
 
     public void addReactor(Reactor reactor, Scene scene, Map<String,MapMarker> markers){// obtaining reference to marker named "reactor-area-1"
         MapMarker reactorArea1 = markers.get("reactor-area-1");
@@ -70,14 +70,14 @@ public class TrainingGameplay extends Scenario implements SceneListener {
     public void repairReactor(Reactor reactor, Hammer hammer){
         new When<>(
             () -> reactor.getTemperature() >= 3000,
-            new Invoke<>(() -> reactor.repair())
+            new Invoke<>(reactor::repair)
         ).scheduleFor(reactor);
     }
 
     public void extinguishReactor(Reactor reactor, FireExtinguisher ext){
         new When<>(
             () -> reactor.getDamage() >= 100,
-            new Invoke<>(() -> reactor.extinguish())
+            new Invoke<>(reactor::extinguish)
         ).scheduleFor(reactor);
         new When<>(
             () -> reactor.getDamage() >= 100,

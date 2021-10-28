@@ -1,6 +1,5 @@
 package sk.tuke.kpi.oop.game;
 
-import org.jetbrains.annotations.NotNull;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
@@ -41,7 +40,7 @@ public class Cooler extends AbstractActor implements Switchable{
     }
 
     @Override
-    public void addedToScene(@NotNull Scene scene){
+    public void addedToScene(Scene scene){
         super.addedToScene(scene);
         new Loop<>(new Invoke<>(this::coolReactor)).scheduleFor(this);
     }

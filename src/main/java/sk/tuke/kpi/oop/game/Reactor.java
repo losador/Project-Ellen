@@ -60,24 +60,18 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
     }
 
     public void increaseTemperature(int increment){
-        if(!this.isOn) return;
-        if(increment < 0) return;
-        if(this.damage > 100) return;
-        int newIncrement;
+        if(increment < 0 || !this.isOn) return;
+        int newIncrement = increment;
         if(this.damage >= 33 && this.damage <= 66){
             newIncrement = (int)Math.round(increment * 1.5);
         }
         else if(this.damage > 66){
-            newIncrement = increment * 2;
+            newIncrement *= 2;
         }
-        else {
-            newIncrement = increment;
-        }
-        this.temperature = this.temperature + newIncrement;
-        if(this.temperature > 2000){
-            float newDamage = (float)(this.temperature - 2000)/40;
-            this.damage = (int)Math.floor(newDamage);
-            if(this.damage >= 100){
+        this.temperature += newIncrement;
+        if(this.temperature > 2000 && this.damage < 100){
+            this.damage = (this.temperature - 2000)/40;
+            if(this.damage > 100){
                 this.damage = 100;
                 this.turnOff();
                 if(this.devices != null) this.devices.forEach(this::updateStateOfDevice);
@@ -88,14 +82,12 @@ public class Reactor extends AbstractActor implements Switchable, Repairable{
 
     public void decreaseTemperature(int decrement){
         if(!this.isOn) return;
-        int newDecrement = 0;
+        int newDecrement = decrement;
         if(decrement < 0) return;
         if(this.damage == 100){
             return;
         }
-        else if(this.damage >= 50 && this.damage < 100) {
-            newDecrement = decrement / 2;
-        }
+        if(this.damage >= 50) newDecrement = Math.round(newDecrement / 2);
         this.temperature -= newDecrement;
         updateAnimation();
     }

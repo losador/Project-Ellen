@@ -43,10 +43,13 @@ public class Light extends AbstractActor implements Switchable, EnergyConsumer{
     private void updateAnimation() {
         if (this.isLightOn) {
             if (this.isEl) {
-                setAnimation(onAnimation);
+                setAnimation(this.onAnimation);
             } else {
-                setAnimation(offAnimation);
+                setAnimation(this.offAnimation);
             }
+        }
+        else{
+            setAnimation(this.offAnimation);
         }
     }
 

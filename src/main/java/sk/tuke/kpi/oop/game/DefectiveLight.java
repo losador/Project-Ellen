@@ -42,11 +42,11 @@ public class DefectiveLight extends Light implements Repairable{
         this.repaired = true;
         this.disposeLight.dispose();
         turnOn();
-        new ActionSequence<>(
+        this.disposeLight = new ActionSequence<>(
             new Wait<>(10),
             new Invoke<>(this::turnOn)
         ).scheduleFor(this);
-        new ActionSequence<>(
+        this.disposeLight = new ActionSequence<>(
             new Wait<>(10),
             new Invoke<>(this::breakLight)
         ).scheduleFor(this);
