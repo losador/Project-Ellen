@@ -13,16 +13,10 @@ public class ChainBomb extends TimeBomb {
         super(time);
     }
 
-    private int getX(){
-        int x;
-        x = this.getPosX() - this.getWidth()/2;
-        return x;
-    }
-
     @Override
     public void explode() {
         super.explode();
-        Ellipse2D.Float ellipse = new Ellipse2D.Float((this.getPosX() - this.getWidth()/2) - 50, (this.getPosY() - this.getHeight() / 2) - 50, 100, 100);
+        Ellipse2D.Float ellipse = new Ellipse2D.Float((this.getPosX() - this.getWidth()/2) - 50, (this.getPosY() - this.getHeight() / 2) - 50, 102, 102);
         List<Actor> actorslist = Objects.requireNonNull(getScene()).getActors();
         for (Actor actor : actorslist) {
             if (actor instanceof ChainBomb && !((ChainBomb) actor).isActivated()) {

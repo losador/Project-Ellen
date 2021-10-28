@@ -14,8 +14,7 @@ public class Teleport extends AbstractActor {
 
     public Teleport(Teleport teleport){
         this.destTeleport = teleport;
-        Animation teleportAnimation;
-        setAnimation(teleportAnimation = new Animation("sprites/lift.png"));
+        setAnimation(new Animation("sprites/lift.png"));
         this.isActive = false;
     }
 
