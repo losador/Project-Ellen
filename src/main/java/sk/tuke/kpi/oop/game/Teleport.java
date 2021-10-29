@@ -2,6 +2,7 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
+import sk.tuke.kpi.gamelib.actions.When;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.framework.Player;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
@@ -42,20 +43,33 @@ public class Teleport extends AbstractActor {
     public void teleportPlayer(Player player){
         int x, y;
         if(this.destTeleport != null) {
-            if(this.isActive){
+            /*if(this.isActive){
                 if(this.intersects(player)) return;
                 else this.isActive = false;
-            }
+            }*/
             x = this.destTeleport.getPosX() + (this.destTeleport.getWidth()/6);
             y = this.destTeleport.getPosY() + (this.destTeleport.getHeight()/6);
             if(this.ifIntersects(this, player)) {player.setPosition(x, y); this.destTeleport.isActive = true;}
         }
     }
 
+    private boolean isTeleported(Player player){
+        if(this.isActive){
+            if(this.intersects(player)) return true;
+            else this.isActive = false;
+        }
+        return false;
+    }
+
     @Override
     public void addedToScene(Scene scene){
         super.addedToScene(scene);
         Player player = (Player) Objects.requireNonNull(getScene()).getFirstActorByName("Player");
-        new Loop<>(new Invoke<>(this::teleportPlayer)).scheduleFor(player);
+        new Loop<>(
+            new When<>(
+                () -> this.isTeleported(player) == false,
+                new Invoke<>(this::teleportPlayer)
+            )
+        ).scheduleFor(player);
     }
 }
