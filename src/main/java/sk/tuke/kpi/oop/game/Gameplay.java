@@ -35,7 +35,6 @@ public class Gameplay extends Scenario implements SceneListener {
         reactor.turnOn();
     }
 
-
     public void addCooler(Scene scene, Cooler cooler, Map<String,MapMarker> markers){
         MapMarker coolerArea1 = markers.get("cooler-area-1");
         scene.addActor(cooler, coolerArea1.getPosX(), coolerArea1.getPosY());
@@ -44,6 +43,7 @@ public class Gameplay extends Scenario implements SceneListener {
             new Invoke<>(cooler::turnOn)
         ).scheduleFor(cooler);
     }
+    
     public void addCooler2(Scene scene, Cooler cooler, Map<String,MapMarker> markers){
         MapMarker coolerArea2 = markers.get("cooler-area-2");
         scene.addActor(cooler, coolerArea2.getPosX(), coolerArea2.getPosY());
