@@ -31,7 +31,7 @@ public class Teleport extends AbstractActor {
         return this.destTeleport;
     }
 
-    public boolean ifIntersects(Teleport tp, Actor actor){
+    /*public boolean ifIntersects(Teleport tp, Actor actor){
         int xTp, yTp, xAc, yAc;
         xTp = tp.getPosX() + tp.getWidth()/2;
         yTp = tp.getPosY() + tp.getHeight()/2;
@@ -39,7 +39,7 @@ public class Teleport extends AbstractActor {
         yAc = actor.getPosY() + actor.getHeight()/2;
         if(((xAc > xTp - 5) && (xAc < xTp + 5)) && ((yAc > yTp - 5) && (yAc < yTp + 5))) return true;
         return false;
-    }
+    }*/
 
     public void teleportPLayer(Player player){
         int x, y;
