@@ -22,7 +22,6 @@ public class Teleport extends AbstractActor {
     public void setDestination(Teleport destinationTeleport){
         if(destinationTeleport == this) return;
         this.destTeleport = destinationTeleport;
-        this.destTeleport.isActive = false;
     }
 
     public Teleport getDestination(){
@@ -36,7 +35,7 @@ public class Teleport extends AbstractActor {
         yTp = tp.getPosY() + tp.getHeight()/2;
         xAc = player.getPosX() + player.getWidth()/2;
         yAc = player.getPosY() + player.getHeight()/2;
-        if(((xAc > xTp - 5) && (xAc < xTp + 5)) && ((yAc > yTp - 5) && (yAc < yTp + 5))) return true;
+        if(((xAc > xTp - 24) && (xAc < xTp + 24)) && ((yAc > yTp - 24) && (yAc < yTp + 24))) return true;
         return false;
     }
 
