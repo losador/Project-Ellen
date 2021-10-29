@@ -27,6 +27,7 @@ public class Teleport extends AbstractActor {
     }
 
     public Teleport getDestination(){
+        if(this.destTeleport == null) return null;
         return this.destTeleport;
     }
 
@@ -47,9 +48,9 @@ public class Teleport extends AbstractActor {
                 if(this.intersects(player)) return;
                 else this.isActive = false;
             }
-            x = this.destTeleport.getPosX() + (this.destTeleport.getWidth()/4);
-            y = this.destTeleport.getPosY() + (this.destTeleport.getHeight()/4);
-            if(ifIntersects(this, player)) {player.setPosition(x, y); this.destTeleport.isActive = true;}
+            x = this.destTeleport.getPosX() + (this.destTeleport.getWidth()/6);
+            y = this.destTeleport.getPosY() + (this.destTeleport.getHeight()/6);
+            if(this.intersects(player)) {player.setPosition(x, y); this.destTeleport.isActive = true;}
         }
     }
 
