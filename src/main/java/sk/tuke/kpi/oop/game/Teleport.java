@@ -1,6 +1,5 @@
 package sk.tuke.kpi.oop.game;
 
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
@@ -31,17 +30,17 @@ public class Teleport extends AbstractActor {
         return this.destTeleport;
     }
 
-    /*public boolean ifIntersects(Teleport tp, Actor actor){
+    public boolean ifIntersects(Teleport tp, Player player){
         int xTp, yTp, xAc, yAc;
         xTp = tp.getPosX() + tp.getWidth()/2;
         yTp = tp.getPosY() + tp.getHeight()/2;
-        xAc = actor.getPosX() + actor.getWidth()/2;
-        yAc = actor.getPosY() + actor.getHeight()/2;
+        xAc = player.getPosX() + player.getWidth()/2;
+        yAc = player.getPosY() + player.getHeight()/2;
         if(((xAc > xTp - 5) && (xAc < xTp + 5)) && ((yAc > yTp - 5) && (yAc < yTp + 5))) return true;
         return false;
-    }*/
+    }
 
-    public void teleportPLayer(Player player){
+    public void teleportPlayer(Player player){
         int x, y;
         if(this.destTeleport != null) {
             if(this.isActive){
@@ -50,7 +49,7 @@ public class Teleport extends AbstractActor {
             }
             x = this.destTeleport.getPosX() + (this.destTeleport.getWidth()/6);
             y = this.destTeleport.getPosY() + (this.destTeleport.getHeight()/6);
-            if(this.intersects(player)) {player.setPosition(x, y); this.destTeleport.isActive = true;}
+            if(this.ifIntersects(this, player)) {player.setPosition(x, y); this.destTeleport.isActive = true;}
         }
     }
 
@@ -58,6 +57,6 @@ public class Teleport extends AbstractActor {
     public void addedToScene(Scene scene){
         super.addedToScene(scene);
         Player player = (Player) Objects.requireNonNull(getScene()).getFirstActorByName("Player");
-        new Loop<>(new Invoke<>(this::teleportPLayer)).scheduleFor(player);
+        new Loop<>(new Invoke<>(this::teleportPlayer)).scheduleFor(player);
     }
 }
