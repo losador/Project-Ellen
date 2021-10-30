@@ -1,5 +1,6 @@
 package sk.tuke.kpi.oop.game;
 
+import sk.tuke.kpi.gamelib.Disposable;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.actions.When;
@@ -12,7 +13,9 @@ import java.util.Objects;
 
 public class Teleport extends AbstractActor {
     private Teleport destTeleport;
+    private int checkCounter = 0;
     private boolean isActive;
+    private Disposable disposeTp;
 
     public Teleport(Teleport teleport){
         this.destTeleport = teleport;
@@ -30,6 +33,17 @@ public class Teleport extends AbstractActor {
         return this.destTeleport;
     }
 
+    private boolean isInMiddle(Player player){
+        if(player.getPosX() == this.getPosX() + (this.getWidth()/6) && player.getPosY() == this.getPosY() + (this.getHeight()/6)) return true;
+        return false;
+    }
+
+    private boolean check(Player player){
+        if(this.isActive) return false;
+        if(!ifIntersects(this, player)) return false;
+        return true;
+    }
+
     public boolean ifIntersects(Teleport tp, Player player){
         int xTp, yTp, xAc, yAc;
         xTp = tp.getPosX() + tp.getWidth()/2;
@@ -40,36 +54,37 @@ public class Teleport extends AbstractActor {
         return false;
     }
 
-    public void teleportPlayer(Player player){
-        int x, y;
-        if(this.destTeleport != null) {
-            /*if(this.isActive){
-                if(this.intersects(player)) return;
-                else this.isActive = false;
-            }*/
-            x = this.destTeleport.getPosX() + (this.destTeleport.getWidth()/6);
-            y = this.destTeleport.getPosY() + (this.destTeleport.getHeight()/6);
-            if(this.ifIntersects(this, player)) {player.setPosition(x, y); this.destTeleport.isActive = true;}
+    private boolean playerInTp(Player player){
+        if(check(player)) return true;
+        return false;
+    }
+
+    private void teleportOn(Player player){
+        if(playerInTp(player) && this.destTeleport != null){
+            this.destTeleport.teleportPlayer(player);
         }
     }
 
-    private boolean isTeleported(Player player){
-        if(this.isActive){
-            if(this.intersects(player)) return true;
-            else this.isActive = false;
+    public void teleportPlayer(Player player){
+        int x, y;
+        if(player != null) {
+            x = this.getPosX() + (this.getWidth()/6);
+            y = this.getPosY() + (this.getHeight()/6);
+            player.setPosition(x, y);
+            this.isActive = true;
+            new When<>(
+                () -> (!player.intersects(this) && !this.playerInTp(player)),
+                new Invoke<>(() -> { this.isActive = false; })
+            ).scheduleFor(this);
         }
-        return false;
     }
+
+
 
     @Override
     public void addedToScene(Scene scene){
         super.addedToScene(scene);
         Player player = (Player) Objects.requireNonNull(getScene()).getFirstActorByName("Player");
-        new Loop<>(
-            new When<>(
-                () -> this.isTeleported(player) == false,
-                new Invoke<>(this::teleportPlayer)
-            )
-        ).scheduleFor(player);
+        this.disposeTp = new Loop<>(new Invoke<>(this::teleportOn)).scheduleFor(player);
     }
 }
