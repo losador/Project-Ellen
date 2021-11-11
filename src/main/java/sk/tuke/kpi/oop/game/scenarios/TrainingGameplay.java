@@ -1,7 +1,6 @@
 package sk.tuke.kpi.oop.game.scenarios;
 
 import org.jetbrains.annotations.NotNull;
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.SceneListener;
 import sk.tuke.kpi.gamelib.actions.ActionSequence;
@@ -14,14 +13,13 @@ import sk.tuke.kpi.oop.game.Computer;
 import sk.tuke.kpi.oop.game.Cooler;
 import sk.tuke.kpi.oop.game.DefectiveLight;
 import sk.tuke.kpi.oop.game.Reactor;
-import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
-import sk.tuke.kpi.oop.game.tools.Hammer;
-import sk.tuke.kpi.oop.game.tools.Wrench;
+import sk.tuke.kpi.oop.game.items.FireExtinguisher;
+import sk.tuke.kpi.oop.game.items.Hammer;
+import sk.tuke.kpi.oop.game.items.Wrench;
 
-import java.text.spi.CollatorProvider;
 import java.util.Map;
 
-public class Gameplay extends Scenario implements SceneListener {
+public class TrainingGameplay extends Scenario implements SceneListener {
 
     public void addReactor(Reactor reactor, Scene scene, Map<String,MapMarker> markers){// obtaining reference to marker named "reactor-area-1"
         MapMarker reactorArea1 = markers.get("reactor-area-1");
@@ -43,7 +41,7 @@ public class Gameplay extends Scenario implements SceneListener {
             new Invoke<>(cooler::turnOn)
         ).scheduleFor(cooler);
     }
-    
+
     public void addCooler2(Scene scene, Cooler cooler, Map<String,MapMarker> markers){
         MapMarker coolerArea2 = markers.get("cooler-area-2");
         scene.addActor(cooler, coolerArea2.getPosX(), coolerArea2.getPosY());
