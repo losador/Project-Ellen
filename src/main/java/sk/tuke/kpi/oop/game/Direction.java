@@ -39,4 +39,19 @@ public enum Direction {
         else if(this.dx == -1 && this.dy == -1) return 135;
         else return 0;
     }
+
+    public Direction combine(Direction other){
+        if(other == this) return null;
+        for(Direction dir : Direction.values()){
+            int newX = this.dx + other.dx;
+            if(newX < -1) newX = -1;
+            else if(newX > 1) newX= 1;
+            int newY = this.dy + other.dy;
+            if(newY < -1) newY = -1;
+            else if(newY > 1) newY = 1;
+
+            if(dir.getDx() == newX && dir.getDy() == newY) return dir;
+        }
+        return NONE;
+    }
 }
