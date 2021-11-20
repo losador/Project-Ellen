@@ -53,6 +53,7 @@ public class Backpack implements ActorContainer<Collectible> {
 
     @Override
     public @Nullable Collectible peek(){
+        if(this.items.size() == 0) return null;
         return this.items.get(items.size() - 1);
     }
 

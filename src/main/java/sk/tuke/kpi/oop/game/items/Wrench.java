@@ -15,4 +15,9 @@ public class Wrench extends BreakableTool<DefectiveLight> implements Collectible
         if(dfLight == null) return;
         if(dfLight.repair()) super.useWith(dfLight);
     }
+
+    @Override
+    public Class<DefectiveLight> getUsingActorClass() {
+        return DefectiveLight.class;
+    }
 }
