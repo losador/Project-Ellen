@@ -18,7 +18,7 @@ import java.util.Objects;
 public class Alien extends AbstractActor implements Enemy, Alive, Movable{
 
     private Health health;
-    Behaviour<? super Alien> behaviour;
+    private Behaviour<? super Alien> behaviour;
 
     public Alien(){
         this.health = new Health(100);
