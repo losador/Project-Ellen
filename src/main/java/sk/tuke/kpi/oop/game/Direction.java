@@ -76,8 +76,9 @@ public enum Direction {
         if (angle == 315) return NORTHEAST;
         return NONE;
     }
-        public Direction combine(Direction other){
-        if(other == this) return null;
+
+    public Direction combine(Direction other){
+        if(other == this) return this;
         for(Direction dir : Direction.values()){
             int newX = this.dx + other.dx;
             if(newX < -1) newX = -1;

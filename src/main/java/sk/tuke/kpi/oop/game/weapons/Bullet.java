@@ -49,7 +49,6 @@ public class Bullet extends AbstractActor implements Fireable {
         for(Actor actor : Actors){
             if(actor instanceof Alive && this.intersects(actor) && !(actor instanceof Ripley)){
                 ((Alive)actor).getHealth().drain(35);
-                System.out.printf("%s: %d", actor.getName(), ((Alive) actor).getHealth().getValue());
                 collidedWithWall();
             }
         }

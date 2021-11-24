@@ -13,7 +13,6 @@ import sk.tuke.kpi.oop.game.Movable;
 import sk.tuke.kpi.oop.game.behaviours.Behaviour;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Alien extends AbstractActor implements Enemy, Alive, Movable{
 

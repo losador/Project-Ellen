@@ -50,8 +50,8 @@ public class KeeperController implements KeyboardListener {
     public void bKey(){
         Collectible item = this.keeper.getBackpack().peek();
         if(item == null) return;
-        if(item instanceof Usable){
-            if(new Use<>((Usable<?>) item).scheduleForIntersectingWith(this.keeper) != null) this.keeper.getBackpack().remove(item);
+        if(item instanceof Usable && new Use<>((Usable<?>) item).scheduleForIntersectingWith(this.keeper) != null){
+            this.keeper.getBackpack().remove(item);
         }
     }
 }
