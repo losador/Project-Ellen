@@ -14,7 +14,7 @@ public class Drop<A extends Keeper> extends AbstractAction<A> {
             setDone(true);
             return;
         }
-        if(this.getActor().getBackpack().getSize() == 0){
+        if(this.getActor().getBackpack().peek() == null){
             setDone(true);
             return;
         }

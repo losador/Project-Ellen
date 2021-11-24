@@ -20,11 +20,12 @@ public class Door extends AbstractActor implements Openable, Usable<Actor> {
     private boolean isOpened;
     private Orientation orientation;
     public enum Orientation {VERTICAL, HORIZONTAL};
+    private String animSource = "sprites/vdoor.png";
 
     public Door(){
-        this.openedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE);
-        this.closedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE_REVERSED);
-        setAnimation(new Animation("sprites/vdoor.png", 16, 32));
+        this.openedDoorAnimation = new Animation(this.animSource, 16, 32, 0.2f, Animation.PlayMode.ONCE);
+        this.closedDoorAnimation = new Animation(this.animSource, 16, 32, 0.2f, Animation.PlayMode.ONCE_REVERSED);
+        setAnimation(new Animation(this.animSource, 16, 32));
         this.getAnimation().stop();
         this.isOpened = false;
     }
@@ -33,9 +34,9 @@ public class Door extends AbstractActor implements Openable, Usable<Actor> {
         super(name);
         this.orientation = orientation;
         if(orientation == Orientation.VERTICAL) {
-            this.openedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE);
-            this.closedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE_REVERSED);
-            setAnimation(new Animation("sprites/vdoor.png", 16, 32));
+            this.openedDoorAnimation = new Animation(this.animSource, 16, 32, 0.2f, Animation.PlayMode.ONCE);
+            this.closedDoorAnimation = new Animation(this.animSource, 16, 32, 0.2f, Animation.PlayMode.ONCE_REVERSED);
+            setAnimation(new Animation(this.animSource, 16, 32));
         }
         else if(orientation == Orientation.HORIZONTAL){
             this.openedDoorAnimation = new Animation("sprites/hdoor.png", 32, 16, 0.2f, Animation.PlayMode.ONCE);

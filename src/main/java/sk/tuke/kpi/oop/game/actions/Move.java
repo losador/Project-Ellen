@@ -66,9 +66,8 @@ public class Move<A extends Movable> implements Action<A> {
     }
 
     public void stop(){
-        if(this.getActor() == null) return;
         this.isDone = true;
-        this.actor.stoppedMoving();
+        if(this.actor != null) this.actor.stoppedMoving();
         this.isCalledFirstTime = 0;
     }
 
