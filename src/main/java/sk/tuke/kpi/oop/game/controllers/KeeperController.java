@@ -21,7 +21,7 @@ public class KeeperController implements KeyboardListener {
     }
 
     @Override
-    public void keyPressed(Input.@NotNull Key key) {
+    public void keyPressed(@NotNull Input.Key key) {
         if(key == Input.Key.ENTER){
             new Take<>(this.keeper).scheduleFor(this.keeper);
         }
