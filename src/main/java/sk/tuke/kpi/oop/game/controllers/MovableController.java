@@ -53,9 +53,17 @@ public class MovableController implements KeyboardListener {
     @Override
     public void keyReleased(@NotNull Input.Key key){
         if(this.keyDirectionMap.containsKey(key) && this.move != null){
-            this.previousDirections.clear();
+            this.previousDirections.remove(this.keyDirectionMap.get(key));
             this.move.stop();
             this.move = null;
+            if(this.previousDirections.size() > 0) {
+                Direction newDirection = Direction.NONE;
+                for (Direction dir : this.previousDirections) {
+                    newDirection = newDirection.combine(dir);
+                }
+                this.move = new Move<>(newDirection, Float.MAX_VALUE);
+                this.move.scheduleFor(this.actor);
+            }
         }
     }
 
