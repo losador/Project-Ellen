@@ -70,9 +70,4 @@ public class Alien extends AbstractActor implements Enemy, Alive, Movable{
         return 1;
     }
 
-    @Override
-    public void collidedWithWall(){
-        this.behaviour.setUp(this);
-    }
-
 }

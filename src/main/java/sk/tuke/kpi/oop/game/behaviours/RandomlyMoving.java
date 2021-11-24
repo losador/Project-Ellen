@@ -20,7 +20,7 @@ public class RandomlyMoving implements Behaviour<Movable>{
         new Loop<>(
             new ActionSequence<>(
                 new Invoke<>(this::move),
-                new Wait<>(2.5f)
+                new Wait<>(1)
             )
         ).scheduleFor(actor);
     }
@@ -41,7 +41,7 @@ public class RandomlyMoving implements Behaviour<Movable>{
 
         assert direction != null;
         actor.getAnimation().setRotation(direction.getAngle());
-        this.action = new Move<>(direction, 2);
+        this.action = new Move<>(direction, 1);
         this.action.scheduleFor(this.actor);
     }
 }
