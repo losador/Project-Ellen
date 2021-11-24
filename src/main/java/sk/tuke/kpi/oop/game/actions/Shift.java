@@ -13,10 +13,6 @@ public class Shift<A extends Keeper> extends AbstractAction<A> {
             setDone(true);
             return;
         }
-        if(this.getActor().getBackpack().getSize() == 0){
-            setDone(true);
-            return;
-        }
         this.getActor().getBackpack().shift();
         setDone(true);
     }

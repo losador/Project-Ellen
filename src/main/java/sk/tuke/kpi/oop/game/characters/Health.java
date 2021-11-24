@@ -41,7 +41,10 @@ public class Health {
 
     public void exhaust(){
         this.currentHealth = 0;
-        if(this.effects != null) effects.forEach(ExhaustionEffect::apply);
+        if(this.effects != null) {
+            this.effects.forEach(ExhaustionEffect::apply);
+            this.effects.clear();
+        }
     }
 
     public void onExhaustion(ExhaustionEffect effect){
