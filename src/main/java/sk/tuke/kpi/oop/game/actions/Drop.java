@@ -6,6 +6,7 @@ import sk.tuke.kpi.oop.game.items.Collectible;
 
 public class Drop<A extends Keeper> extends AbstractAction<A> {
 
+
     @Override
     public void execute(float deltaTime) {
         if(this.isDone()) return;

@@ -23,13 +23,13 @@ public class KeeperController implements KeyboardListener {
     @Override
     public void keyPressed(@NotNull Input.Key key) {
         if(key == Input.Key.ENTER){
-            new Take<>(this.keeper).scheduleFor(this.keeper);
+            new Take<>().scheduleFor(this.keeper);
         }
         if(key == Input.Key.BACKSPACE){
-            new Drop<>(this.keeper).scheduleFor(this.keeper);
+            new Drop<>().scheduleFor(this.keeper);
         }
         if(key == Input.Key.S){
-            new Shift<>(this.keeper).scheduleFor(this.keeper);
+            new Shift<>().scheduleFor(this.keeper);
         }
         if(key == Input.Key.U){
             this.useKey();
