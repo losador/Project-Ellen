@@ -8,12 +8,6 @@ import java.util.List;
 
 public class Take<A extends Keeper> extends AbstractAction<A> {
 
-    private Keeper keeper;
-
-    public Take(Keeper keeper){
-        this.keeper = keeper;
-    }
-
     @Override
     public void execute(float deltaTime) {
         if(this.isDone()) return;
@@ -21,15 +15,15 @@ public class Take<A extends Keeper> extends AbstractAction<A> {
             setDone(true);
             return;
         }
-        List<Actor> items = this.keeper.getScene().getActors();
+        List<Actor> items = this.getActor().getScene().getActors();
 
         for(Actor item : items){
-            if(item instanceof Collectible && item.intersects(this.keeper)){
+            if(item instanceof Collectible && item.intersects(this.getActor())){
                 try {
-                    this.keeper.getBackpack().add((Collectible) item);
-                    this.keeper.getScene().removeActor(item);
+                    this.getActor().getBackpack().add((Collectible) item);
+                    this.getActor().getScene().removeActor(item);
                 } catch (IllegalStateException exception){
-                    this.keeper.getScene().getOverlay().drawText(exception.getMessage(), 0, 0).showFor(2);
+                    this.getActor().getScene().getOverlay().drawText(exception.getMessage(), 0, 0).showFor(2);
                 }
             }
         }

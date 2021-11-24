@@ -4,13 +4,7 @@ import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.framework.actions.AbstractAction;
 import sk.tuke.kpi.oop.game.Keeper;
 
-public class Shift<A extends Actor> extends AbstractAction<A> {
-
-    private Keeper keeper;
-
-    public Shift(Keeper keeper){
-        this.keeper = keeper;
-    }
+public class Shift<A extends Keeper> extends AbstractAction<A> {
 
     @Override
     public void execute(float deltaTime) {
@@ -19,11 +13,11 @@ public class Shift<A extends Actor> extends AbstractAction<A> {
             setDone(true);
             return;
         }
-        if(this.keeper.getBackpack().getSize() == 0){
+        if(this.getActor().getBackpack().getSize() == 0){
             setDone(true);
             return;
         }
-        this.keeper.getBackpack().shift();
+        this.getActor().getBackpack().shift();
         setDone(true);
     }
 }

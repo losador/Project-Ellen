@@ -6,12 +6,6 @@ import sk.tuke.kpi.oop.game.items.Collectible;
 
 public class Drop<A extends Keeper> extends AbstractAction<A> {
 
-    private Keeper keeper;
-
-    public Drop(Keeper keeper){
-        this.keeper = keeper;
-    }
-
     @Override
     public void execute(float deltaTime) {
         if(this.isDone()) return;
@@ -19,13 +13,13 @@ public class Drop<A extends Keeper> extends AbstractAction<A> {
             setDone(true);
             return;
         }
-        if(this.keeper.getBackpack().getSize() == 0){
+        if(this.getActor().getBackpack().getSize() == 0){
             setDone(true);
             return;
         }
-        Collectible item = this.keeper.getBackpack().peek();
-        this.keeper.getScene().addActor(item, (this.keeper.getPosX() + this.keeper.getWidth()/2 - item.getWidth()/2), (this.keeper.getPosY() + this.keeper.getHeight()/2 - item.getHeight()/2));
-        this.keeper.getBackpack().remove(item);
+        Collectible item = this.getActor().getBackpack().peek();
+        this.getActor().getScene().addActor(item, (this.getActor().getPosX() + this.getActor().getWidth()/2 - item.getWidth()/2), (this.getActor().getPosY() + this.getActor().getHeight()/2 - item.getHeight()/2));
+        this.getActor().getBackpack().remove(item);
         setDone(true);
     }
 }
