@@ -36,7 +36,7 @@ public class Health {
 
     public void drain(int amount){
         this.currentHealth -= amount;
-        if(this.currentHealth < 0) this.exhaust();
+        if(this.currentHealth <= 0) this.exhaust();
     }
 
     public void exhaust(){

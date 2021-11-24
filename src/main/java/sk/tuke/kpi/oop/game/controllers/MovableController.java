@@ -56,7 +56,7 @@ public class MovableController implements KeyboardListener {
             this.previousDirections.remove(this.keyDirectionMap.get(key));
             this.move.stop();
             this.move = null;
-            if(this.previousDirections.size() > 0) {
+            if(!this.previousDirections.isEmpty()){
                 Direction newDirection = Direction.NONE;
                 for (Direction dir : this.previousDirections) {
                     newDirection = newDirection.combine(dir);

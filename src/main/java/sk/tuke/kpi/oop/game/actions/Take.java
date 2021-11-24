@@ -10,7 +10,7 @@ public class Take<A extends Keeper> extends AbstractAction<A> {
 
     @Override
     public void execute(float deltaTime) {
-        if(getActor().getScene() == null || getActor() == null || this.isDone()){
+        if(getActor() == null || this.isDone()){
             setDone(true);
             return;
         }
