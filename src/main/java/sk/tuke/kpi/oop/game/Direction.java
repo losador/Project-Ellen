@@ -29,7 +29,7 @@ public enum Direction {
     }
 
     public float getAngle(){
-        if(this.dx == 0 && this.dy == 1) return 0;
+        /*if(this.dx == 0 && this.dy == 1) return 0;
         else if(this.dx == 1 && this.dy == 0) return 270;
         else if(this.dx == 0 && this.dy == -1) return 180;
         else if(this.dx == -1 && this.dy == 0) return 90;
@@ -37,7 +37,32 @@ public enum Direction {
         else if(this.dx == -1 && this.dy == 1) return 45;
         else if(this.dx == 1 && this.dy == -1) return 225;
         else if(this.dx == -1 && this.dy == -1) return 135;
-        else return 0;
+        else return 0;*/
+        if(this.dx == -1){
+            return negative(this.dy);
+        }
+        if(this.dx == 0){
+            if(this.dy == -1) return 180;
+            else return 0;
+        }
+        if(this.dx == 1){
+            return positive(this.dy);
+        }
+        return 0;
+    }
+
+    private float negative(int y){
+        if(y == -1) return 135;
+        if(y == 0) return 90;
+        if(y == 1) return 45;
+        return 0;
+    }
+
+    private float positive(int y){
+        if(y == -1) return 225;
+        if(y == 0) return 270;
+        if(y == 1) return 315;
+        return 0;
     }
 
     public static Direction fromAngle(float angle) {
