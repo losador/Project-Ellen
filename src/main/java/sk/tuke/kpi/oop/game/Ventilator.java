@@ -3,7 +3,6 @@ package sk.tuke.kpi.oop.game;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.gamelib.messages.Topic;
-import sk.tuke.kpi.oop.game.openables.Door;
 
 import java.util.Objects;
 

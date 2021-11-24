@@ -45,6 +45,7 @@ public class Move<A extends Movable> implements Action<A> {
 
     @Override
     public void execute(float deltaTime) {
+        if(this.getActor() == null) return;
         this.duration -= deltaTime;
         if(!isDone){
             if(this.isCalledFirstTime == 0){
@@ -55,6 +56,7 @@ public class Move<A extends Movable> implements Action<A> {
                 this.actor.setPosition(this.actor.getPosX() + this.direction.getDx() * this.actor.getSpeed(), this.actor.getPosY() + this.direction.getDy() * this.actor.getSpeed());
                 if(this.getActor().getScene().getMap().intersectsWithWall(this.actor)){
                     this.actor.setPosition(this.actor.getPosX() - this.direction.getDx() * this.actor.getSpeed(), this.actor.getPosY() - this.direction.getDy() * this.actor.getSpeed());
+                    this.actor.collidedWithWall();
                 }
             }
             else{
@@ -64,6 +66,7 @@ public class Move<A extends Movable> implements Action<A> {
     }
 
     public void stop(){
+        if(this.getActor() == null) return;
         this.isDone = true;
         this.actor.stoppedMoving();
         this.isCalledFirstTime = 0;

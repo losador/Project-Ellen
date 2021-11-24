@@ -40,7 +40,18 @@ public enum Direction {
         else return 0;
     }
 
-    public Direction combine(Direction other){
+    public static Direction fromAngle(float angle) {
+        if (angle == 0) return NORTH;
+        if (angle == 45) return NORTHWEST;
+        if (angle == 90) return WEST;
+        if (angle == 135) return SOUTHWEST;
+        if (angle == 180) return SOUTH;
+        if (angle == 225) return SOUTHEAST;
+        if (angle == 270) return EAST;
+        if (angle == 315) return NORTHEAST;
+        return NONE;
+    }
+        public Direction combine(Direction other){
         if(other == this) return null;
         for(Direction dir : Direction.values()){
             int newX = this.dx + other.dx;

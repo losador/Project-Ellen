@@ -18,11 +18,30 @@ public class Door extends AbstractActor implements Openable, Usable<Actor> {
     public static final Topic<Door> DOOR_OPENED = Topic.create("door opened", Door.class);
     public static final Topic<Door> DOOR_CLOSED = Topic.create("door closed", Door.class);
     private boolean isOpened;
+    private Orientation orientation;
+    public enum Orientation {VERTICAL, HORIZONTAL};
 
     public Door(){
         this.openedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE);
         this.closedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE_REVERSED);
         setAnimation(new Animation("sprites/vdoor.png", 16, 32));
+        this.getAnimation().stop();
+        this.isOpened = false;
+    }
+
+    public Door(String name, Orientation orientation){
+        super(name);
+        this.orientation = orientation;
+        if(orientation == Orientation.VERTICAL) {
+            this.openedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE);
+            this.closedDoorAnimation = new Animation("sprites/vdoor.png", 16, 32, 0.2f, Animation.PlayMode.ONCE_REVERSED);
+            setAnimation(new Animation("sprites/vdoor.png", 16, 32));
+        }
+        else if(orientation == Orientation.HORIZONTAL){
+            this.openedDoorAnimation = new Animation("sprites/hdoor.png", 32, 16, 0.2f, Animation.PlayMode.ONCE);
+            this.closedDoorAnimation = new Animation("sprites/hdoor.png", 32, 16, 0.2f, Animation.PlayMode.ONCE_REVERSED);
+            setAnimation(new Animation("sprites/hdoor.png", 32, 16));
+        }
         this.getAnimation().stop();
         this.isOpened = false;
     }
@@ -40,8 +59,14 @@ public class Door extends AbstractActor implements Openable, Usable<Actor> {
 
     @Override
     public void open() {
-        Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.CLEAR);
-        Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, (this.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        if(this.orientation == Orientation.VERTICAL) {
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.CLEAR);
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, (this.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        }
+        else if(this.orientation == Orientation.HORIZONTAL){
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.CLEAR);
+            Objects.requireNonNull(this.getScene()).getMap().getTile((this.getPosX() / 16) + 1, this.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        }
         this.isOpened = true;
         setAnimation(this.openedDoorAnimation);
         this.getAnimation().play();
@@ -50,11 +75,17 @@ public class Door extends AbstractActor implements Openable, Usable<Actor> {
 
     @Override
     public void close() {
+        if(this.orientation == Orientation.VERTICAL){
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.WALL);
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, (this.getPosY() / 16) + 1).setType(MapTile.Type.WALL);
+        }
+        else if(this.orientation == Orientation.HORIZONTAL){
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.WALL);
+            Objects.requireNonNull(this.getScene()).getMap().getTile((this.getPosX() / 16) + 1, this.getPosY() / 16).setType(MapTile.Type.WALL);
+        }
         this.isOpened = false;
         setAnimation(this.closedDoorAnimation);
         this.getAnimation().play();
-        Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.WALL);
-        Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, (this.getPosY() / 16) + 1).setType(MapTile.Type.WALL);
         this.getScene().getMessageBus().publish(DOOR_CLOSED, this);
     }
 
@@ -66,8 +97,14 @@ public class Door extends AbstractActor implements Openable, Usable<Actor> {
     @Override
     public void addedToScene(@NotNull Scene scene){
         super.addedToScene(scene);
-        Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.WALL);
-        Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, (this.getPosY() / 16) + 1).setType(MapTile.Type.WALL);
+        if(this.orientation == Orientation.VERTICAL) {
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.WALL);
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, (this.getPosY() / 16) + 1).setType(MapTile.Type.WALL);
+        }
+        else if(this.orientation == Orientation.HORIZONTAL){
+            Objects.requireNonNull(this.getScene()).getMap().getTile(this.getPosX() / 16, this.getPosY() / 16).setType(MapTile.Type.WALL);
+            Objects.requireNonNull(this.getScene()).getMap().getTile((this.getPosX() / 16) + 1, this.getPosY() / 16).setType(MapTile.Type.WALL);
+        }
     }
 
 

@@ -10,6 +10,10 @@ public class LockedDoor extends Door{
         super();
         this.isLocked = true;
     }
+    public LockedDoor(String name, Orientation orientation){
+        super(name, orientation);
+        this.isLocked = true;
+    }
 
     public void lock(){
         this.isLocked = true;

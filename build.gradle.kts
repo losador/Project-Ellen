@@ -26,8 +26,7 @@ application {
 dependencies {
     implementation("sk.tuke.kpi.gamelib:gamelib-framework:$gamelibVersion")
     implementation("sk.tuke.kpi.gamelib:gamelib-backend-$backend:$gamelibVersion")
-    implementation("sk.tuke.kpi.gamelib:gamelib-inspector:$gamelibVersion")
-}
+    implementation("sk.tuke.kpi.gamelib:gamelib-inspector:$gamelibVersion")}
 
 tasks {
     withType<JavaCompile> {

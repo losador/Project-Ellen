@@ -2,12 +2,7 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.*;
 import sk.tuke.kpi.gamelib.backends.lwjgl.LwjglBackend;
-import sk.tuke.kpi.gamelib.inspector.InspectableScene;
-import sk.tuke.kpi.oop.game.openables.Door;
-import sk.tuke.kpi.oop.game.scenarios.FirstSteps;
-import sk.tuke.kpi.oop.game.scenarios.MissionImpossible;
-
-import java.util.List;
+import sk.tuke.kpi.oop.game.scenarios.EscapeRoom;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,13 +15,13 @@ public class Main {
 
         // creating scene for game
         // using class `World` as implementation of interface `Scene`
-        Scene scene = new World("mission-impossible", "maps/mission-impossible.tmx", new MissionImpossible.Factory());
+        Scene scene = new World("escape-room", "maps/escape-room.tmx", new EscapeRoom.Factory());
 
         //SceneListener FirstSteps = new FirstSteps();
-        SceneListener MissionImpossible = new MissionImpossible();
+        SceneListener EscapeRoom = new EscapeRoom();
 
         //scene.addListener(FirstSteps);
-        scene.addListener(MissionImpossible);
+        scene.addListener(EscapeRoom);
 
         // adding scene into the game
         game.addScene(scene);

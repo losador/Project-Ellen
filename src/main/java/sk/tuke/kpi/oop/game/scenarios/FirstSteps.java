@@ -19,8 +19,6 @@ public class FirstSteps implements SceneListener {
     public void sceneInitialized(Scene scene){
         Ripley ripley = new Ripley();
         this.ripley = ripley;
-        ripley.setEnergy(64);
-        ripley.setAmmo(400);
         scene.addActor(ripley);
         MovableController movableController = new MovableController(ripley);
         scene.getInput().registerListener(movableController);
@@ -95,7 +93,7 @@ public class FirstSteps implements SceneListener {
         int yTextPos = windowHeight - GameApplication.STATUS_LINE_OFFSET;
         int windowWidth = scene.getGame().getWindowSetup().getWidth();
         int xTextPos = windowWidth / 6 - GameApplication.STATUS_LINE_OFFSET;
-        scene.getGame().getOverlay().drawText(" |  Energy: " + ripley.getEnergy(), xTextPos, yTextPos);
-        scene.getGame().getOverlay().drawText(" |  Ammo: " + ripley.getAmmo(), xTextPos + 165, yTextPos);
+        scene.getGame().getOverlay().drawText(" |  Energy: " + ripley.getHealth().getValue(), xTextPos, yTextPos);
+        scene.getGame().getOverlay().drawText(" |  Ammo: " + ripley.getFirearm().getAmmo(), xTextPos + 165, yTextPos);
     }
 }

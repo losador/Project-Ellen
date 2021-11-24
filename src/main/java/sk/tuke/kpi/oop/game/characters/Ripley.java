@@ -1,9 +1,7 @@
 package sk.tuke.kpi.oop.game.characters;
 
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Disposable;
 import sk.tuke.kpi.gamelib.GameApplication;
-import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.ActionSequence;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.actions.Wait;
@@ -15,29 +13,37 @@ import sk.tuke.kpi.oop.game.Direction;
 import sk.tuke.kpi.oop.game.Keeper;
 import sk.tuke.kpi.oop.game.Movable;
 import sk.tuke.kpi.oop.game.items.Backpack;
+import sk.tuke.kpi.oop.game.weapons.Firearm;
+import sk.tuke.kpi.oop.game.weapons.Gun;
 
 import java.util.Objects;
 
-public class Ripley extends AbstractActor implements Movable, Keeper {
+public class Ripley extends AbstractActor implements Movable, Keeper, Alive, Armed {
 
     private int speed;
     private Animation ripleyAnimation;
     private Disposable energyDecreasing;
     private Animation diedAnimation;
-    private int energy;
+    private Health currentHealth;
     private int ammo;
+    private Firearm gun;
     private Backpack backpack;
     public static final Topic<Ripley> RIPLEY_DIED = Topic.create("ripley died", Ripley.class);
 
     public Ripley(){
          super("Ellen");
          this.speed = 2;
-         this.energy = 100;
+         this.currentHealth = new Health(100, 100);
          this.backpack = new Backpack("Ripley`s backpack", 10);
          this.ripleyAnimation = new Animation("sprites/player.png", 32, 32, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
          this.diedAnimation = new Animation("sprites/player_die.png", 32, 32, 0.1f, Animation.PlayMode.ONCE);
          setAnimation(ripleyAnimation);
          this.ripleyAnimation.stop();
+         this.currentHealth.onExhaustion(() -> {
+            this.setAnimation(new Animation("sprites/player_die.png",32,32,0.1f, Animation.PlayMode.ONCE));
+            Objects.requireNonNull(getScene()).getMessageBus().publish(RIPLEY_DIED,this);
+         });
+         this.gun = new Gun(100, 200);
     }
 
     @Override
@@ -56,34 +62,18 @@ public class Ripley extends AbstractActor implements Movable, Keeper {
         this.ripleyAnimation.stop();
     }
 
-    public void setEnergy(int energy){
-        this.energy = energy;
-    }
-
-    public int getEnergy(){
-        return this.energy;
-    }
-
-    public void setAmmo(int ammo){
-        this.ammo = ammo;
-    }
-
-    public int getAmmo(){
-        return this.ammo;
-    }
-
     @Override
     public Backpack getBackpack() {
         return this.backpack;
     }
 
-    public void showRipleyState(Ripley ripley, Scene scene){
-        int windowHeight = scene.getGame().getWindowSetup().getHeight();
+    public void showRipleyState(){
+        int windowHeight = this.getScene().getGame().getWindowSetup().getHeight();
         int yTextPos = windowHeight - GameApplication.STATUS_LINE_OFFSET;
-        int windowWidth = scene.getGame().getWindowSetup().getWidth();
+        int windowWidth = this.getScene().getGame().getWindowSetup().getWidth();
         int xTextPos = windowWidth / 6 - GameApplication.STATUS_LINE_OFFSET;
-        scene.getGame().getOverlay().drawText(" |  Energy: " + ripley.getEnergy(), xTextPos, yTextPos);
-        scene.getGame().getOverlay().drawText(" |  Ammo: " + ripley.getAmmo(), xTextPos + 165, yTextPos);
+        this.getScene().getGame().getOverlay().drawText(" |  Energy: " + this.currentHealth.getValue(), xTextPos, yTextPos);
+        this.getScene().getGame().getOverlay().drawText(" |  Ammo: " + this.getFirearm().getAmmo(), xTextPos + 165, yTextPos);
     }
 
     public void decreaseEnergy(){
@@ -98,18 +88,32 @@ public class Ripley extends AbstractActor implements Movable, Keeper {
     }
 
     private void checkEnergy(){
-        if(this.energy <= 0){
+        if(this.currentHealth.getValue() <= 0){
             setAnimation(this.diedAnimation);
             Objects.requireNonNull(this.getScene()).getMessageBus().publish(RIPLEY_DIED, this);
         }
     }
 
     private void decrease(){
-        this.setEnergy(this.getEnergy() - 2);
-        if(this.getEnergy() < 0) this.setEnergy(0);
+        this.currentHealth.drain(2);
     }
 
     public Disposable getDisposable(){
         return this.energyDecreasing;
+    }
+
+    @Override
+    public Health getHealth() {
+        return this.currentHealth;
+    }
+
+    @Override
+    public Firearm getFirearm() {
+        return this.gun;
+    }
+
+    @Override
+    public void setFirearm(Firearm weapon) {
+        this.gun = weapon;
     }
 }

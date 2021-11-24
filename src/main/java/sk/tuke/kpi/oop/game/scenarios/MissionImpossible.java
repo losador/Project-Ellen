@@ -3,10 +3,7 @@ package sk.tuke.kpi.oop.game.scenarios;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sk.tuke.kpi.gamelib.*;
-import sk.tuke.kpi.gamelib.actions.ActionSequence;
 import sk.tuke.kpi.gamelib.actions.Invoke;
-import sk.tuke.kpi.gamelib.actions.Wait;
-import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.oop.game.Locker;
 import sk.tuke.kpi.oop.game.Ventilator;
 import sk.tuke.kpi.oop.game.characters.Ripley;
@@ -42,8 +39,6 @@ public class MissionImpossible implements SceneListener {
         assert ripley != null;
         scene.follow(ripley);
 
-        Disposable energy;
-
         MovableController movableController = new MovableController(ripley);
         Disposable move = scene.getInput().registerListener(movableController);
         KeeperController keeperController = new KeeperController(ripley);
@@ -61,6 +56,6 @@ public class MissionImpossible implements SceneListener {
     public void sceneUpdating(@NotNull Scene scene){
         Ripley ripley = scene.getFirstActorByType(Ripley.class);
         assert ripley != null;
-        ripley.showRipleyState(ripley, scene);
+        ripley.showRipleyState();
     }
 }
