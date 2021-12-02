@@ -2,12 +2,12 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.*;
 import sk.tuke.kpi.gamelib.backends.lwjgl.LwjglBackend;
-import sk.tuke.kpi.oop.game.scenarios.EscapeRoom;
+import sk.tuke.kpi.oop.game.scenarios.MyLevel;
 
 public class Main {
     public static void main(String[] args) {
         // setting game window: window name and its dimensions
-        WindowSetup windowSetup = new WindowSetup("Project Ellen", 800, 600);
+        WindowSetup windowSetup = new WindowSetup("Project Ellen", 1200, 700);
 
         // creating instance of game application
         // using class `GameApplication` as implementation of interface `Game`
@@ -15,13 +15,13 @@ public class Main {
 
         // creating scene for game
         // using class `World` as implementation of interface `Scene`
-        Scene scene = new World("escape-room", "maps/escape-room.tmx", new EscapeRoom.Factory());
+        Scene scene = new World("my map", "maps/map.tmx", new MyLevel.Factory());
 
         //SceneListener FirstSteps = new FirstSteps();
-        SceneListener EscapeRoom = new EscapeRoom();
+        SceneListener MyLevel = new MyLevel();
 
         //scene.addListener(FirstSteps);
-        scene.addListener(EscapeRoom);
+        scene.addListener(MyLevel);
 
         // adding scene into the game
         game.addScene(scene);

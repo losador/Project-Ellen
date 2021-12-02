@@ -42,7 +42,7 @@ public class Ripley extends AbstractActor implements Movable, Keeper, Alive, Arm
             this.setAnimation(new Animation("sprites/player_die.png",32,32,0.1f, Animation.PlayMode.ONCE));
             Objects.requireNonNull(getScene()).getMessageBus().publish(RIPLEY_DIED,this);
          });
-         this.gun = new Gun(100, 200);
+         this.gun = new Gun(100, 500);
     }
 
     @Override
@@ -70,9 +70,9 @@ public class Ripley extends AbstractActor implements Movable, Keeper, Alive, Arm
         int windowHeight = this.getScene().getGame().getWindowSetup().getHeight();
         int yTextPos = windowHeight - GameApplication.STATUS_LINE_OFFSET;
         int windowWidth = this.getScene().getGame().getWindowSetup().getWidth();
-        int xTextPos = windowWidth / 6 - GameApplication.STATUS_LINE_OFFSET;
-        this.getScene().getGame().getOverlay().drawText(" |  Energy: " + this.currentHealth.getValue(), xTextPos, yTextPos);
-        this.getScene().getGame().getOverlay().drawText(" |  Ammo: " + this.getFirearm().getAmmo(), xTextPos + 165, yTextPos);
+        int xTextPos = windowWidth - GameApplication.STATUS_LINE_OFFSET*9;
+        this.getScene().getGame().getOverlay().drawText("Health: " + this.currentHealth.getValue() + "  |", xTextPos, yTextPos);
+        this.getScene().getGame().getOverlay().drawText("Ammo: " + this.getFirearm().getAmmo(), xTextPos + 165, yTextPos);
     }
 
     public void decreaseEnergy(){
@@ -91,6 +91,10 @@ public class Ripley extends AbstractActor implements Movable, Keeper, Alive, Arm
             setAnimation(this.diedAnimation);
             Objects.requireNonNull(this.getScene()).getMessageBus().publish(RIPLEY_DIED, this);
         }
+    }
+
+    public void explode(){
+        this.setAnimation(new Animation("sprites/large_explosion.png", 32, 32, 0.1f, Animation.PlayMode.LOOP_PINGPONG));
     }
 
     private void decrease(){
