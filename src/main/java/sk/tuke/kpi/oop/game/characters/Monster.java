@@ -9,6 +9,7 @@ import sk.tuke.kpi.gamelib.actions.Wait;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.gamelib.messages.Topic;
 import sk.tuke.kpi.oop.game.Destroyable;
 import sk.tuke.kpi.oop.game.Locker;
 import sk.tuke.kpi.oop.game.Movable;
@@ -21,12 +22,15 @@ public class Monster extends AbstractActor implements Alive, Enemy, Movable {
 
     private Health health;
     private Behaviour<? super Monster> behaviour;
+    public static final Topic<Monster> MONSTER_DIED = Topic.create("monster died", Monster.class);
+
 
     public Monster(int health, Behaviour<? super Monster> behaviour){
         this.behaviour = behaviour;
         this.health = new Health(health);
         setAnimation(new Animation("sprites/monster.png", 78, 127, 0.5f, Animation.PlayMode.LOOP_PINGPONG));
         this.health.onExhaustion(() -> {
+            this.getScene().getMessageBus().publish(MONSTER_DIED, this);
             this.getScene().cancelActions(this);
             this.getScene().addActor(new Locker(), this.getPosX(), this.getPosY());
             this.getScene().removeActor(this);

@@ -15,8 +15,6 @@ public class LaunchRocket<A extends Armed> extends AbstractAction<A> {
         }
 
         if(!isDone()){
-            int x = Direction.fromAngle(getActor().getAnimation().getRotation()).getDx();
-            int y = Direction.fromAngle(getActor().getAnimation().getRotation()).getDy();
             Fireable fireable = this.getActor().getFirearm().fire();
             if(fireable != null){
                 this.getActor().getScene().addActor(fireable, this.getActor().getPosX() + (this.getActor().getWidth()/3), this.getActor().getPosY() + (this.getActor().getHeight()));

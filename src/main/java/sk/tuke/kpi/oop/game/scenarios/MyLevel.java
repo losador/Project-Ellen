@@ -6,7 +6,9 @@ import sk.tuke.kpi.gamelib.*;
 import sk.tuke.kpi.gamelib.actions.ActionSequence;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.actions.Wait;
+import sk.tuke.kpi.gamelib.actions.When;
 import sk.tuke.kpi.gamelib.map.MapMarker;
+import sk.tuke.kpi.gamelib.map.MapTile;
 import sk.tuke.kpi.oop.game.*;
 import sk.tuke.kpi.oop.game.behaviours.FollowingActor;
 import sk.tuke.kpi.oop.game.behaviours.RandomlyMoving;
@@ -52,7 +54,7 @@ public class MyLevel implements SceneListener {
                 case "turret1": return new Turret("turret1", 3);
                 case "turret2": return new Turret("turret2", 4);
                 case "turret3": return new Turret("turret3", 2);
-                case "terminal": return new Terminal("126663");
+                case "terminal": return new Terminal("7266638");
                 case "card": return new Card();
                 default: return null;
             }
@@ -75,10 +77,21 @@ public class MyLevel implements SceneListener {
         Disposable shoot = scene.getInput().registerListener(shooterController);
 
         Map<String, MapMarker> markers = scene.getMap().getMarkers();
+        MapMarker boss = markers.get("boss room");
         MapMarker monsterArea = markers.get("monster");
+        MapMarker fieldM = markers.get("fieldM");
 
         MapMarker card = markers.get("card");
         scene.getMessageBus().subscribe(ForceField.FIELD_DISABLED, (Scene) -> scene.addActor(new Monster(1000, new FollowingActor()), monsterArea.getPosX(), monsterArea.getPosY()));
+        ForceField field = new ForceField();
+        new When<>(
+            () -> ripley.getPosY() < boss.getPosY() && (ripley.getPosX() > boss.getPosX()),
+            new ActionSequence<>(
+                new Wait<>(1),
+                new Invoke<>(() -> scene.addActor(field, fieldM.getPosX(), fieldM.getPosY()))
+            )
+        ).scheduleOn(scene);
+        scene.getMessageBus().subscribe(Monster.MONSTER_DIED, (Scene) -> this.removeField(scene, field));
 
         scene.getMessageBus().subscribe(Turret.TURRET_DISABLED, turret -> {
             if(turret.getName().equals("turret2")){
@@ -120,6 +133,27 @@ public class MyLevel implements SceneListener {
         move.dispose();
         keep.dispose();
         shoot.dispose();
+    }
+
+    private void removeField(Scene scene, ForceField field){
+        scene.getMap().getTile(field.getPosX() / 16, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 1, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 2, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 3, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 4, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 5, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 6, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 7, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 8, field.getPosY() / 16).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 1, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 2, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 3, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 4, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 5, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 6, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 7, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.getMap().getTile((field.getPosX() / 16) + 8, (field.getPosY() / 16) + 1).setType(MapTile.Type.CLEAR);
+        scene.removeActor(field);
     }
 
     private void showDialog(){

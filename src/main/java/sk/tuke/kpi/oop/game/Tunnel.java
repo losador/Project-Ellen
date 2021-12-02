@@ -20,8 +20,10 @@ public class Tunnel extends AbstractActor implements Usable<Ripley> {
     private Animation openAnim;
     private Animation closeAnim;
     private Disposable loop;
+    private boolean isUsed;
 
     public Tunnel(){
+        this.isUsed = false;
         this.openAnim = new Animation("sprites/tunnel_black.png", 32, 32, 0.3f, Animation.PlayMode.ONCE);
         this.closeAnim = new Animation("sprites/tunnel_black.png", 32, 32, 0.3f, Animation.PlayMode.ONCE_REVERSED);
         setAnimation(this.openAnim);
@@ -44,9 +46,12 @@ public class Tunnel extends AbstractActor implements Usable<Ripley> {
 
     @Override
     public void useWith(Ripley actor){
-        setAnimation(this.closeAnim);
-        this.loop.dispose();
-        this.getScene().addActor(new AccessCard(), this.getPosX(), this.getPosY());
+        if(!this.isUsed) {
+            this.isUsed = true;
+            setAnimation(this.closeAnim);
+            this.loop.dispose();
+            this.getScene().addActor(new AccessCard(), this.getPosX(), this.getPosY());
+        }
     }
 
     @Override

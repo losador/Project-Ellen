@@ -1,13 +1,11 @@
 package sk.tuke.kpi.oop.game.openables;
 
 import org.jetbrains.annotations.NotNull;
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.gamelib.map.MapTile;
 import sk.tuke.kpi.gamelib.messages.Topic;
-import sk.tuke.kpi.oop.game.items.Usable;
 
 import java.util.Objects;
 
