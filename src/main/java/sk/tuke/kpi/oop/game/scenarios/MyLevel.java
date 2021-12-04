@@ -43,8 +43,11 @@ public class MyLevel implements SceneListener {
                 case "start door": return new LockedDoor("front door", Door.Orientation.VERTICAL);
                 case "tunnel": return new Tunnel();
                 case "vdoor": return new Door("vdoor", Door.Orientation.VERTICAL);
+                case "first door": return new Door("first door", Door.Orientation.VERTICAL);
+                case "term door": return new Door("term door", Door.Orientation.VERTICAL);
                 case "hdoor": return new Door("hdoor", Door.Orientation.HORIZONTAL);
                 case "exit door": return new LockedDoor("exit door", Door.Orientation.HORIZONTAL);
+                case "vent door": return new Door("vent door", Door.Orientation.HORIZONTAL);
                 case "field": return new ForceField();
                 case "ventilator": return new Ventilator();
                 case "locker": return new Locker();
@@ -118,10 +121,21 @@ public class MyLevel implements SceneListener {
         scene.getMessageBus().subscribe(Ripley.RIPLEY_DIED, (Ripley) -> keep.dispose());
         scene.getMessageBus().subscribe(Ripley.RIPLEY_DIED, (Ripley) -> shoot.dispose());
 
+        scene.getMessageBus().subscribe(Door.DOOR_OPENED, door -> {if(door.getName().equals("first door")){
+                                                                    JOptionPane.showMessageDialog(null, "Listen here. Yout mission is to find and eliminate Captain Zorg`s 'pet'. But be very careful...they say no one managed to kill him...Good luck!", "Intro", JOptionPane.PLAIN_MESSAGE);
+        }});
+        scene.getMessageBus().subscribe(Door.DOOR_OPENED, door -> {if(door.getName().equals("vent door")){
+            JOptionPane.showMessageDialog(null, "It loks like you need to repair the ventilator. To do this, you need to find a hammer!", "Vent", JOptionPane.PLAIN_MESSAGE);
+        }});
+        scene.getMessageBus().subscribe(Door.DOOR_OPENED, door -> {if(door.getName().equals("term door")){
+            JOptionPane.showMessageDialog(null, "Exit door is locked...Try to find a way to unlock it in computer!", "Comp", JOptionPane.PLAIN_MESSAGE);
+        }});
+
         scene.getMessageBus().subscribe(Ventilator.VENTILATOR_REPAIRED, (Scene) -> scene.addActor(new AccessCard(), 665, 760));
 
         Game game = scene.getGame();
 
+        game.getInput().onKeyPressed(Input.Key.R, () -> {game.stop(); game.start();});
         scene.getGame().getInput().onKeyPressed(Input.Key.ESCAPE, game::stop);
 
     }
