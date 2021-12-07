@@ -9,14 +9,18 @@ import sk.tuke.kpi.gamelib.actions.Wait;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.gamelib.messages.Topic;
+import sk.tuke.kpi.oop.game.Destroyable;
 import sk.tuke.kpi.oop.game.Movable;
 import sk.tuke.kpi.oop.game.behaviours.Behaviour;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Alien extends AbstractActor implements Enemy, Alive, Movable{
 
     private Health health;
+    public static final Topic<Alien> ALIEN_DIED = Topic.create("alien died", Alien.class);
     private Behaviour<? super Alien> behaviour;
 
     public Alien(){
@@ -24,6 +28,7 @@ public class Alien extends AbstractActor implements Enemy, Alive, Movable{
         setAnimation(new Animation("sprites/alien.png", 32, 32, 0.1f, Animation.PlayMode.LOOP_PINGPONG));
         this.health.onExhaustion(() -> {
             this.getScene().removeActor(this);
+            Objects.requireNonNull(getScene()).getMessageBus().publish(ALIEN_DIED,this);
         });
     }
 
@@ -46,7 +51,7 @@ public class Alien extends AbstractActor implements Enemy, Alive, Movable{
         Actors = getScene().getActors();
 
         for(Actor actor : Actors){
-            if(actor instanceof Alive && !(actor instanceof Enemy) && this.intersects(actor)){
+            if(actor instanceof Alive && !(actor instanceof Enemy) && !(actor instanceof Destroyable) && this.intersects(actor)){
                 ((Alive) actor).getHealth().drain(2);
                 break;
             }
